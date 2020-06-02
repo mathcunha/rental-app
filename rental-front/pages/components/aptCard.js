@@ -28,17 +28,19 @@ export default function AptCard({ apt }) {
           image="https://picsum.photos/200/300"
           title="Contemplative Reptile"
         />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {apt.name}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {`${apt.rooms} rooms . ${apt.size}`} m<sup>2</sup>
-          </Typography>
-          <Typography variant="overline" color="textSecondary" component="p">
-            {`U$ ${apt.price}/month`}
-          </Typography>
-        </CardContent>
+        {apt && (
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {apt.name}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="p">
+              {`${apt.room} rooms . ${apt.size}`} m<sup>2</sup>
+            </Typography>
+            <Typography variant="overline" color="textSecondary" component="p">
+              {`U$ ${apt.price}/month`}
+            </Typography>
+          </CardContent>
+        )}
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary">

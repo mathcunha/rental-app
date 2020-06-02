@@ -1,8 +1,9 @@
-import React from "react";
+import useSWR from "swr";
 import GoogleMaps from "./googleMaps";
 import AptCard from "./aptCard";
 import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import AuthService from "../../utils/authService";
 
 const useStyles = makeStyles((theme) => ({
   apartamentGrid: {
@@ -16,59 +17,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const fakeData = [
-  {
-    name: "12345678901234567890",
-    size: 124,
-    rooms: 12,
-    price: 12.12,
-    lat: 47,
-    lng: -120,
-  },
-  {
-    name: "Casa Azul",
-    size: 123,
-    rooms: 4,
-    price: 120.01,
-    lat: 47,
-    lng: -120,
-  },
-  {
-    name: "Casa Amarela",
-    size: 124,
-    rooms: 12,
-    price: 12.12,
-    lat: 47,
-    lng: -120,
-  },
-  {
-    name: "Casa Azul",
-    size: 123,
-    rooms: 4,
-    price: 120.01,
-    lat: 47,
-    lng: -120,
-  },
-];
-
 const Welcome = () => {
   const classes = useStyles();
+  const Auth = new AuthService();
+  const { data, error } = useSWR(
+    `${process.env.API_URL}/apartments/search/filter?projection=publicApartment&available=true`,
+    Auth.fetch
+  );
   return (
     <Container maxWidth="lg" component="main">
       <Grid container spacing={1}>
         <Grid item xs={12} sm={6} md={4}>
           <Paper className="paper" className={classes.mapGrid}>
-            <GoogleMaps />
+            <GoogleMaps data={data} />
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6} md={8}>
           <Paper className="paper" className={classes.apartamentGrid}>
             <Grid container spacing={2}>
-              {fakeData.map((apt, index) => (
-                <Grid item xs={12} md={6} key={index}>
-                  <AptCard apt={apt} />
+              {!data ? (
+                <Grid item xs={12} md={6}>
+                  Loading
                 </Grid>
-              ))}
+              ) : (
+                data._embedded &&
+                data._embedded.apartments.map((apt) => (
+                  <Grid item xs={12} md={6} key={apt.name}>
+                    <AptCard apt={apt} />
+                  </Grid>
+                ))
+              )}
             </Grid>
           </Paper>
         </Grid>
