@@ -11,11 +11,9 @@ import Menu from "@material-ui/core/Menu";
 import { CssBaseline, Container, Box, Grid, Paper } from "@material-ui/core";
 import Copyright from "./components/copyright";
 import GoogleMaps from "./components/googleMaps";
+import AptCard from "./components/aptCard";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
@@ -36,14 +34,50 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   apartamentGrid: {
-    overflowY: "scroll",
+    overflowY: "auto",
+    overflowX: "hidden",
     height: 500,
   },
   mapGrid: {
-    width: 400,
+    width: 350,
     height: 500,
   },
 }));
+
+const fakeData = [
+  {
+    name: "12345678901234567890",
+    size: 124,
+    rooms: 12,
+    price: 12.12,
+    lat: 47,
+    lng: -120,
+  },
+  {
+    name: "Casa Azul",
+    size: 123,
+    rooms: 4,
+    price: 120.01,
+    lat: 47,
+    lng: -120,
+  },
+  {
+    name: "Casa Amarela",
+    size: 124,
+    rooms: 12,
+    price: 12.12,
+    lat: 47,
+    lng: -120,
+  },
+  {
+    name: "Casa Azul",
+    size: 123,
+    rooms: 4,
+    price: 120.01,
+    lat: 47,
+    lng: -120,
+  },
+];
 
 export default function Welcome() {
   const classes = useStyles();
@@ -105,7 +139,7 @@ export default function Welcome() {
                 open={open}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}>My rentals</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
               </Menu>
             </div>
@@ -121,102 +155,21 @@ export default function Welcome() {
       {/* End hero unit */}
       {/* Hero unit */}
       <Container maxWidth="lg" component="main">
-        <Grid container spacing={5}>
-          <Grid item xs={12} md={8}>
-            <Paper className="paper" className={classes.apartamentGrid}>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Card
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                component="p"
-              >
-                Quickly build an effective pricing table for your potential
-                customers with this layout. It&apos;s built with default
-                Material-UI components with little customization.
-              </Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={4}>
+        <Grid container spacing={1}>
+          <Grid item xs={12} sm={6} md={4}>
             <Paper className="paper" className={classes.mapGrid}>
               <GoogleMaps />
+            </Paper>
+          </Grid>
+          <Grid item xs={12} sm={6} md={8}>
+            <Paper className="paper" className={classes.apartamentGrid}>
+              <Grid container spacing={2}>
+                {fakeData.map((apt, index) => (
+                  <Grid item xs={12} md={6} key={index}>
+                    <AptCard apt={apt} />
+                  </Grid>
+                ))}
+              </Grid>
             </Paper>
           </Grid>
         </Grid>

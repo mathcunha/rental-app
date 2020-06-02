@@ -3,7 +3,7 @@ import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 
 const GoogleMaps = (props) => {
   const containerStyle = {
-    width: "400px",
+    width: "350px",
     height: "500px",
   };
   return (
