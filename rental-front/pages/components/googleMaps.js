@@ -24,7 +24,8 @@ const GoogleMaps = ({ google, data }) => {
       containerStyle={containerStyle}
       initialCenter={{ lat: 47.444, lng: -122.176 }}
     >
-      {data._embedded &&
+      {data &&
+        data._embedded &&
         data._embedded.apartments.map((apt) => (
           <Marker
             draggable={true}
