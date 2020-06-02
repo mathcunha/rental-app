@@ -7,4 +7,14 @@ class ApartmentRepositoryTest {
     Karate testAdmin() {
         return Karate.run("apartment/admin").relativeTo(getClass());
     }
+
+    @Karate.Test
+    Karate testPublicAccess() {
+        return Karate.run("apartment/public").relativeTo(getClass());
+    }
+
+    @Karate.Test
+    Karate testCreateAccess() {
+        return Karate.run("apartment/create").relativeTo(getClass());
+    }
 }

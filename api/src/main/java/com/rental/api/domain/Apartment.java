@@ -47,7 +47,7 @@ public class Apartment {
     private Double lat;
 
     @NotNull
-    private Double lon;
+    private Double lng;
 
     @NotNull(message = "Apartment realtor is required")
     @ManyToOne
@@ -116,12 +116,12 @@ public class Apartment {
         this.lat = lat;
     }
 
-    public Double getLon() {
-        return lon;
+    public Double getLng() {
+        return lng;
     }
 
-    public void setLon(Double lon) {
-        this.lon = lon;
+    public void setLng(Double lng) {
+        this.lng = lng;
     }
 
     public User getUser() {

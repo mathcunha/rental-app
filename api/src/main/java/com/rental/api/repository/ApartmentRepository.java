@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin
 public interface ApartmentRepository extends Repository<Apartment, Long> {
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #userId == authentication.principal.id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #apt.user.id == authentication.principal.id)")
     Apartment save(Apartment apt);
 
     @PreAuthorize("hasRole('ROLE_REALTOR') || hasRole('ROLE_ADMIN')")
@@ -23,15 +23,15 @@ public interface ApartmentRepository extends Repository<Apartment, Long> {
     @Query("select a from Apartment a where a.id = ?1")
     Apartment findById(Long id);
 
-    @PreAuthorize("@apartmentRepository.findById(#apt.id).user.id == authentication.principal.id || hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && @apartmentRepository.findById(#apt.id).user.id == authentication.principal.id)")
     void delete(Apartment apt);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #userId == authentication.principal.id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || ('publicApartment'.equals(#projection) && true == #available) || (hasRole('ROLE_REALTOR') && #userId == authentication.principal.id)")
     @RestResource(exported = true, path = "filter", rel = "filter")
     @Query(
-            value = "select a from Apartment a inner join fetch a.user u where (:size is null or a.size >= :size) and (:price is null or a.price >= :price) and (:room is null or a.room = :room) and (:userId is null or a.user.id = :userId)"
-            ,countQuery = "select COUNT(a) from Apartment a inner join a.user where (:size is null or a.size >= :size) and (:price is null or a.price >= :price) and (:room is null or a.room = :room) and (:userId is null or a.user.id = :userId)"
+            value = "select a from Apartment a inner join fetch a.user u where (:projection is null or :projection = :projection) and (:available is null or a.available = :available) and (:size is null or a.size >= :size) and (:price is null or a.price >= :price) and (:room is null or a.room = :room) and (:userId is null or a.user.id = :userId)"
+            ,countQuery = "select COUNT(a) from Apartment a inner join a.user where (:available is null or a.available = :available) and (:size is null or a.size >= :size) and (:price is null or a.price >= :price) and (:room is null or a.room = :room) and (:userId is null or a.user.id = :userId)"
     )
-    Page<Apartment> filter(Float size, Float price, Integer room, Long userId, Pageable pageable);
+    Page<Apartment> filter(Float size, Float price, Integer room, Long userId, Boolean available, String projection, Pageable pageable);
 
 }
