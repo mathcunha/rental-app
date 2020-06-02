@@ -35,7 +35,7 @@ export default function AptCard({ apt }) {
           <Typography variant="body2" color="textSecondary" component="p">
             {`${apt.rooms} rooms . ${apt.size}`} m<sup>2</sup>
           </Typography>
-          <Typography variant="left" color="textSecondary" component="p">
+          <Typography variant="overline" color="textSecondary" component="p">
             {`U$ ${apt.price}/month`}
           </Typography>
         </CardContent>

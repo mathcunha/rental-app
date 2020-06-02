@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LayoutAdmin = ({ children, router }) => {
+const LayoutAdmin = ({ router, children }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const Auth = new AuthService();
@@ -166,8 +166,11 @@ const LayoutAdmin = ({ children, router }) => {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {Auth.getProfile().isAdmin ||
-              (Auth.getProfile().isRealtor ? children : redirect())}
+            {Auth &&
+            Auth.getProfile() &&
+            (Auth.getProfile().isAdmin || Auth.getProfile().isRealtor)
+              ? children
+              : redirect()}
           </Grid>
           <Box pt={4}>
             <Copyright />
