@@ -34,7 +34,7 @@ export default function AptCard({ apt }) {
               {apt.name}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              {`${apt.room} rooms . ${apt.size}`} m<sup>2</sup>
+              {`${apt.room} rooms . ${apt.aptSize}`} m<sup>2</sup>
             </Typography>
             <Typography variant="overline" color="textSecondary" component="p">
               {`U$ ${apt.price}/month`}

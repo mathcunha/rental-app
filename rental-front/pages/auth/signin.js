@@ -82,7 +82,7 @@ function Signip() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
+    Auth.logout();
     Auth.login(username, password)
       .then((res) => {
         setLoginError(false);

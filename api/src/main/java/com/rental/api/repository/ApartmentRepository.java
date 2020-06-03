@@ -29,9 +29,9 @@ public interface ApartmentRepository extends Repository<Apartment, Long> {
     @PreAuthorize("hasRole('ROLE_ADMIN') || ('publicApartment'.equals(#projection) && true == #available) || (hasRole('ROLE_REALTOR') && #userId == authentication.principal.id)")
     @RestResource(exported = true, path = "filter", rel = "filter")
     @Query(
-            value = "select a from Apartment a inner join fetch a.user u where (:projection is null or :projection = :projection) and (:available is null or a.available = :available) and (:size is null or a.size >= :size) and (:price is null or a.price >= :price) and (:room is null or a.room = :room) and (:userId is null or a.user.id = :userId)"
-            ,countQuery = "select COUNT(a) from Apartment a inner join a.user where (:available is null or a.available = :available) and (:size is null or a.size >= :size) and (:price is null or a.price >= :price) and (:room is null or a.room = :room) and (:userId is null or a.user.id = :userId)"
+            value = "select a from Apartment a inner join fetch a.user u where (:projection is null or :projection = :projection) and (:available is null or a.available = :available) and (:aptSize is null or a.aptSize >= :aptSize) and (:price is null or a.price >= :price) and (:room is null or a.room >= :room) and (:userId is null or a.user.id = :userId)"
+            ,countQuery = "select COUNT(a) from Apartment a inner join a.user where (:available is null or a.available = :available) and (:aptSize is null or a.aptSize >= :aptSize) and (:price is null or a.price >= :price) and (:room is null or a.room >= :room) and (:userId is null or a.user.id = :userId)"
     )
-    Page<Apartment> filter(Float size, Float price, Integer room, Long userId, Boolean available, String projection, Pageable pageable);
+    Page<Apartment> filter(Float aptSize, Float price, Integer room, Long userId, Boolean available, String projection, Pageable pageable);
 
 }

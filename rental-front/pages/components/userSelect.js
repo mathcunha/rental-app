@@ -8,7 +8,7 @@ import AuthService from "../../utils/authService";
 const UserSelect = ({ value, onChange, error }) => {
   const Auth = new AuthService();
   const url =
-    Auth.getProfile().isRealtor === true
+    Auth.getProfile().isAdmin === true
       ? `${process.env.API_URL}/users`
       : `${process.env.API_URL}/users/${Auth.getProfile().id}`;
 

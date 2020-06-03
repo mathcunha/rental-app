@@ -8,7 +8,7 @@ export default function Index() {
         <Paper className="paper">
           <Typography>
             Welcome to rental admin area.{" "}
-            <Link href="/apartments/list"> Apartments </Link>
+            <Link href="/admin/apartments/list"> Apartments </Link>
           </Typography>
         </Paper>
       </Grid>

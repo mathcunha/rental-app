@@ -1,0 +1,343 @@
+import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import { useState, useEffect } from "react";
+import AuthService from "../../../utils/authService";
+import FormControlValidation from "../../../utils/formControlValidation";
+import ActionButtons from "../../components/actionButtons";
+import { withRouter } from "next/router";
+import { InputLabel, MenuItem, Select } from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing(3),
+  },
+}));
+
+const EditApt = ({ apt, router }) => {
+  const Auth = new AuthService();
+  const classes = useStyles();
+  const [endpoint, setEndpoint] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [action, setAction] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [aptSize, setAptSize] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [room, setRoom] = useState(null);
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
+  const [address, setAddress] = useState("");
+  const [available, setAvailable] = useState(true);
+
+  const isNew = () => {
+    return endpoint === "";
+  };
+
+  useEffect(() => {
+    if (apt && apt._links) {
+      setName(apt.name);
+      setDescription(apt.description);
+      setAptSize(apt.aptSize);
+      setPrice(apt.price);
+      setAvailable(apt.available);
+      setRoom(apt.room);
+      setLat(apt.lat);
+      setLng(apt.lng);
+
+      setEndpoint(apt._links.self.href);
+    }
+  }, [apt]);
+
+  const handleChange = (input) => (e) => {
+    switch (input) {
+      case "name":
+        setName(e.target.value);
+        break;
+      case "description":
+        setDescription(e.target.value);
+        break;
+      case "aptSize":
+        setAptSize(e.target.value);
+        break;
+      case "price":
+        setPrice(e.target.value);
+        break;
+      case "available":
+        setAvailable(e.target.value);
+        break;
+      case "room":
+        setRoom(e.target.value);
+        break;
+      case "lat":
+        setLat(e.target.value);
+        break;
+      case "lng":
+        setLng(e.target.value);
+        break;
+      case "address":
+        setAddress(e.target.value);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const getData = () => {
+    return {
+      name: name,
+      description: description,
+      aptSize: aptSize,
+      price: price,
+      available: available,
+      room: room,
+      lat: lat,
+      lng: lng,
+
+      endpoint: endpoint,
+      user: `${process.env.API_URL}/users/${Auth.getProfile().id}`,
+    };
+  };
+
+  const handleDelete = (e) => {
+    setAction("delete");
+    setLoading(true);
+    Auth.delete(endpoint)
+      .then((res) => {
+        router.push("/admin/apartments/list");
+      })
+      .catch((err) => {
+        setError({ status: err.status, json: "error deleting resource" });
+        setLoading(false);
+      });
+  };
+
+  const handleSuccess = (e) => {
+    router.push("/admin/apartments/list");
+  };
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setAction("save");
+    setError("");
+
+    Auth.save("apartments", getData())
+      .then((res) => {
+        setSuccess(true);
+      })
+      .catch((err) => {
+        err.response.json().then((json) => {
+          json.status = err.status;
+          setError({ json });
+        });
+        setLoading(false);
+      });
+  };
+
+  const nameError = FormControlValidation(error, "name");
+  const descriptionError = FormControlValidation(error, "description");
+  const aptSizeError = FormControlValidation(error, "aptSize");
+  const priceError = FormControlValidation(error, "price");
+  const roomError = FormControlValidation(error, "room");
+  const latError = FormControlValidation(error, "lat");
+  const lngError = FormControlValidation(error, "lng");
+  const availableError = FormControlValidation(error, "available");
+
+  return (
+    <Paper className="paper">
+      <Typography component="h1" variant="h5">
+        Apartment
+      </Typography>
+      <form className={classes.form} noValidate>
+        <Grid container spacing={2}>
+          <Grid item xs={9}>
+            <TextField
+              error={nameError != ""}
+              helperText={nameError}
+              type="text"
+              autoComplete="fname"
+              name="name"
+              variant="outlined"
+              required
+              fullWidth
+              id="name"
+              label="Name"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={name}
+              onChange={handleChange("name")}
+              InputProps={{
+                readOnly: !isNew(),
+              }}
+              autoFocus
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <InputLabel shrink={true} id="available-label">
+              Available
+            </InputLabel>
+            <Select
+              labelId="available-label"
+              id="demo-controlled-open-select"
+              error={availableError}
+              value={available}
+              onChange={handleChange("available")}
+            >
+              <MenuItem value={true}>
+                <em>True</em>
+              </MenuItem>
+              <MenuItem value={false}>
+                <em>False</em>
+              </MenuItem>
+            </Select>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              error={descriptionError != ""}
+              helperText={descriptionError}
+              type="text"
+              name="description"
+              variant="outlined"
+              required
+              multiline
+              fullWidth
+              rows={4}
+              id="description"
+              label="Description"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={description}
+              onChange={handleChange("description")}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              error={aptSizeError != ""}
+              helperText={aptSizeError}
+              type="number"
+              name="aptSize"
+              variant="outlined"
+              required
+              fullWidth
+              id="aptSize"
+              label="Floor Size"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={aptSize}
+              onChange={handleChange("aptSize")}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              error={priceError != ""}
+              helperText={priceError}
+              type="number"
+              name="price"
+              variant="outlined"
+              required
+              fullWidth
+              id="price"
+              label="Price per Month"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={price}
+              onChange={handleChange("price")}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              error={roomError != ""}
+              helperText={roomError}
+              type="number"
+              name="room"
+              variant="outlined"
+              required
+              fullWidth
+              id="room"
+              label="Number of Rooms"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={room}
+              onChange={handleChange("room")}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <TextField
+              variant="outlined"
+              type="text"
+              fullWidth
+              id="address"
+              label="Address"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              name="address"
+              value={address}
+              onChange={handleChange("address")}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              error={latError != ""}
+              helperText={latError}
+              type="number"
+              name="lat"
+              variant="outlined"
+              required
+              fullWidth
+              id="lat"
+              label="Latitude"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={lat}
+              onChange={handleChange("lat")}
+            />
+          </Grid>
+          <Grid item xs={3}>
+            <TextField
+              error={lngError != ""}
+              helperText={lngError}
+              type="number"
+              name="lng"
+              variant="outlined"
+              required
+              fullWidth
+              id="lng"
+              label="Longitude"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              value={lng}
+              onChange={handleChange("lng")}
+            />
+          </Grid>
+        </Grid>
+        <ActionButtons
+          action={action}
+          isNew={isNew()}
+          onSave={handleSave}
+          onDelete={handleDelete}
+          loading={loading}
+          success={success}
+          onSuccess={handleSuccess}
+          error={error}
+        />
+      </form>
+    </Paper>
+  );
+};
+
+export default withRouter(EditApt);

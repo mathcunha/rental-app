@@ -7,8 +7,8 @@ import org.springframework.data.rest.core.config.Projection;
 public interface publicApartment {
 
     public String getName();
-    public String getComment();
-    public Float getSize();
+    public String getDescription();
+    public Float getAptSize();
     public Float getPrice();
     public Boolean getAvailable();
     public Integer getRoom();

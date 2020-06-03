@@ -21,19 +21,19 @@ public class Apartment {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Size(min=10, max=100, message = "Please no more than 100 characters")
+    @Size(min=5, max=100, message = "Must have between 5 and 100 characters")
     @Column(updatable = false,length = 100)
     @NotBlank
     private String name;
 
-    @Column(length = 500)
-    @Size(max=500, message = "Please no more than 500 characters")
+    @Column(length = 300)
+    @Size(max=300, message = "Please no more than 300 characters")
     @NotBlank
-    private String comment;
+    private String description;
 
     @NotNull
     @Min(value = 0, message = "Size should not be less than 0")
-    private Float size;
+    private Float aptSize;
 
     @NotNull
     @Min(value = 0, message = "Price should not be less than 0")
@@ -76,20 +76,20 @@ public class Apartment {
         this.name = name;
     }
 
-    public String getComment() {
-        return comment;
+    public String getDescription() {
+        return description;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Float getSize() {
-        return size;
+    public Float getAptSize() {
+        return aptSize;
     }
 
-    public void setSize(Float size) {
-        this.size = size;
+    public void setAptSize(Float aptSize) {
+        this.aptSize = aptSize;
     }
 
     public Float getPrice() {
