@@ -114,13 +114,16 @@ const EditApt = ({ apt, router }) => {
 
   const handleSearchAddress = (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
 
-    Auth.fetch(`${process.env.SERVER_HOST}/api/geocode?address=${address}`)
+    Auth.fetch(`/api/geocode?address=${address}`)
       .then((res) => {
         setLoading(false);
-        setLat(res.location.lat);
-        setLng(res.location.lng);
+        if (res.location) {
+          setLat(res.location.lat);
+          setLng(res.location.lng);
+        }
       })
       .catch((err) => {
         setError({ status: err.status, json: "error reaching geocoding api" });

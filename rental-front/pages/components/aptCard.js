@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -7,6 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import AuthService from "../../utils/authService";
 
 const useStyles = makeStyles({
   root: {
@@ -17,8 +18,22 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AptCard({ apt }) {
+export default function AptCard({ apt, onMouseOver }) {
   const classes = useStyles();
+  const [city, setCity] = useState("");
+  const Auth = new AuthService();
+
+  const searchAddress = () => {
+    Auth.fetch(`/api/geocode?lat=${apt.lat}&lng=${apt.lng}`).then((res) => {
+      if (res.city) {
+        setCity(res.city);
+      }
+    });
+  };
+
+  useEffect(() => {
+    searchAddress();
+  }, [apt]);
 
   return (
     <Card className={classes.root}>
@@ -26,12 +41,12 @@ export default function AptCard({ apt }) {
         <CardMedia
           className={classes.media}
           image="https://picsum.photos/200/300"
-          title="Contemplative Reptile"
+          title={city}
         />
         {apt && (
-          <CardContent>
+          <CardContent onMouseOver={onMouseOver}>
             <Typography gutterBottom variant="h5" component="h2">
-              {apt.name}
+              {apt.name} {city !== "" ? `at ${city}` : ""}
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
               {`${apt.room} rooms . ${apt.aptSize}`} m<sup>2</sup>
