@@ -51,7 +51,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)), price: #(parseFloat(price)), room: #(parseInt(room)), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
     When method POST
     Then status 403
 
@@ -62,7 +62,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)), price: #(parseFloat(price)), room: #(parseInt(room)), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
     When method POST
     Then status 400
 
@@ -73,7 +73,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)), price: #(parseFloat(price)), room: #(parseInt(room)), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
     When method POST
     Then status 201
 
@@ -84,7 +84,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)), price: #(parseFloat(price)), room: #(parseInt(room)), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
     When method POST
     Then status 201
 
@@ -95,7 +95,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)), price: #(parseFloat(price)), room: #(parseInt(room)), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
     When method POST
     Then status 201
 
@@ -106,6 +106,6 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)), price: #(parseFloat(price)), room: #(parseInt(room)), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
     When method POST
     Then status 201

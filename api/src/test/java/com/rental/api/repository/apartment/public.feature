@@ -34,8 +34,18 @@ Feature: Apartments for non users
     Then status 403
 
     Given path 'api/v1/apartments/search/filter'
+    Given param projection = 'user.id'
+    When method GET
+    Then status 403
+
+    Given path 'api/v1/apartments/search/filter'
     Given param projection = 'publicApartment'
     And header Authorization = 'Bearer ' + token.token
+    When method GET
+    Then status 403
+
+    Given path 'api/v1/apartments/search/filter'
+    Given param projection = 'publicApartment'
     When method GET
     Then status 403
 
@@ -46,8 +56,18 @@ Feature: Apartments for non users
     Then status 403
 
     Given path 'api/v1/apartments/search/filter'
+    Given param available = false
+    When method GET
+    Then status 403
+
+    Given path 'api/v1/apartments/search/filter'
     Given param available = true
     And header Authorization = 'Bearer ' + token.token
+    When method GET
+    Then status 403
+
+    Given path 'api/v1/apartments/search/filter'
+    Given param available = true
     When method GET
     Then status 403
 
