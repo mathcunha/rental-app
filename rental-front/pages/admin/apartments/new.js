@@ -1,7 +1,7 @@
 import EditApt from "./edit";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import Layout from "../../components/layout";
+import LayoutAdmin from "../../components/layoutAdmin";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -26,11 +26,11 @@ const useStyles = makeStyles((theme) => ({
 const NewApt = () => {
   const classes = useStyles();
   return (
-    <Layout>
+    <LayoutAdmin>
       <Container maxWidth="sm">
         <EditApt />
       </Container>
-    </Layout>
+    </LayoutAdmin>
   );
 };
 

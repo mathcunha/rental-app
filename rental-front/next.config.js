@@ -7,5 +7,6 @@ module.exports = {
     API_URL: process.env.API_URL,
     GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
     KEY: process.env.KEY,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
 };
