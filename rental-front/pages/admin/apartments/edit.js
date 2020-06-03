@@ -8,7 +8,14 @@ import AuthService from "../../../utils/authService";
 import FormControlValidation from "../../../utils/formControlValidation";
 import ActionButtons from "../../components/actionButtons";
 import { withRouter } from "next/router";
-import { InputLabel, MenuItem, Select } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
+import {
+  InputLabel,
+  MenuItem,
+  Select,
+  InputBase,
+  IconButton,
+} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -28,11 +35,11 @@ const EditApt = ({ apt, router }) => {
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [aptSize, setAptSize] = useState(null);
-  const [price, setPrice] = useState(null);
-  const [room, setRoom] = useState(null);
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
+  const [aptSize, setAptSize] = useState("");
+  const [price, setPrice] = useState("");
+  const [room, setRoom] = useState("");
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
   const [address, setAddress] = useState("");
   const [available, setAvailable] = useState(true);
 
@@ -103,6 +110,22 @@ const EditApt = ({ apt, router }) => {
       endpoint: endpoint,
       user: `${process.env.API_URL}/users/${Auth.getProfile().id}`,
     };
+  };
+
+  const handleSearchAddress = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    Auth.fetch(`${process.env.SERVER_HOST}/api/geocode?address=${address}`)
+      .then((res) => {
+        setLoading(false);
+        setLat(res.location.lat);
+        setLng(res.location.lng);
+      })
+      .catch((err) => {
+        setError({ status: err.status, json: "error reaching geocoding api" });
+        setLoading(false);
+      });
   };
 
   const handleDelete = (e) => {
@@ -274,19 +297,21 @@ const EditApt = ({ apt, router }) => {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              variant="outlined"
-              type="text"
-              fullWidth
-              id="address"
-              label="Address"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              name="address"
-              value={address}
-              onChange={handleChange("address")}
-            />
+            <Paper>
+              <InputBase
+                value={address}
+                onChange={handleChange("address")}
+                placeholder="Search Apt Address"
+                inputProps={{ "aria-label": "search apt address" }}
+              />
+              <IconButton
+                type="submit"
+                aria-label="search"
+                onClick={handleSearchAddress}
+              >
+                <SearchIcon />
+              </IconButton>
+            </Paper>
           </Grid>
           <Grid item xs={3}>
             <TextField
