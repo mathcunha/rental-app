@@ -38,7 +38,7 @@ const GoogleMaps = ({ google, data, marker, width }) => {
     <Map
       google={google}
       zoom={8}
-      style={{ width: mapWidth, height: "75vh" }}
+      containerStyle={{ width: mapWidth, height: "75vh" }}
       center={{
         lat: marker && marker.lat ? marker.lat : 47.444,
         lng: marker && marker.lng ? marker.lng : -122.176,
