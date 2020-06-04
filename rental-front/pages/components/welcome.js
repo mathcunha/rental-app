@@ -14,6 +14,8 @@ import AuthService from "../../utils/authService";
 import { useState, Fragment } from "react";
 import AptDescription from "./aptDescription";
 import SearchIcon from "@material-ui/icons/Search";
+import { withRouter } from "next/router";
+import AptRent from "./aptRent";
 
 const useStyles = makeStyles((theme) => ({
   apartamentGrid: {
@@ -32,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Welcome = () => {
+const Welcome = ({ router }) => {
   const classes = useStyles();
   const [aptSize, setAptSize] = useState(0);
   const [price, setPrice] = useState(0);
@@ -62,8 +64,18 @@ const Welcome = () => {
   );
   const [focusApt, setFocusApt] = useState({});
   const [open, setOpen] = useState(false);
+  const [openRent, setOpenRent] = useState(false);
 
   const handleFocusApt = (apt) => () => {
+    setFocusApt(apt);
+  };
+
+  const handleRent = (apt) => () => {
+    if (!Auth.loggedIn()) {
+      router.push("/auth/signin");
+    } else {
+      setOpenRent(true);
+    }
     setFocusApt(apt);
   };
   return (
@@ -129,6 +141,7 @@ const Welcome = () => {
         <Grid container spacing={1} direction="row-reverse">
           <Grid item xs={12} sm={6} md={8}>
             <AptDescription apt={focusApt} open={open} setOpen={setOpen} />
+            <AptRent open={openRent} setOpen={setOpenRent} />
             <Paper className="paper" className={classes.apartamentGrid}>
               <Grid container spacing={2}>
                 {!data ? (
@@ -142,6 +155,7 @@ const Welcome = () => {
                       <AptCard
                         apt={apt}
                         setOpen={setOpen}
+                        onRent={handleRent(apt)}
                         onMouseOver={handleFocusApt(apt)}
                       />
                     </Grid>
@@ -161,4 +175,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default withRouter(Welcome);

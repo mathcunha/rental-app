@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AptCard({ apt, onMouseOver, setOpen }) {
+export default function AptCard({ apt, onMouseOver, setOpen, onRent }) {
   const classes = useStyles();
   const [city, setCity] = useState("");
   const [img, setImg] = useState("");
@@ -78,6 +78,9 @@ export default function AptCard({ apt, onMouseOver, setOpen }) {
         </Button>
         <Button size="small" color="primary" onClick={handleDescription}>
           More Info
+        </Button>
+        <Button size="small" color="primary" onClick={onRent}>
+          Rent
         </Button>
       </CardActions>
     </Card>
