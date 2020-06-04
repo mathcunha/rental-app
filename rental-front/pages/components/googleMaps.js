@@ -24,7 +24,6 @@ const useStyles = makeStyles({
 const GoogleMaps = ({ google, data, marker, width }) => {
   const [mapWidth, setMapWidth] = useState("30vw");
   useEffect(() => {
-    console.log(width);
     if ("sm" === width) {
       setMapWidth("45vw");
     } else if ("xs" === width) {
