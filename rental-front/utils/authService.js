@@ -51,22 +51,17 @@ export default class AuthService {
   setProfile(profile) {
     // Saves profile data to localStorage
 
-    let isAdmin = false;
-    let isRealtor = false;
     for (let index = 0; index < profile.authorities.length; index++) {
       const element = profile.authorities[index];
       if (element.authority === "ROLE_ADMIN") {
-        isAdmin = true;
+        profile.isAdmin = true;
       }
       if (element.authority === "ROLE_REALTOR") {
-        isRealtor = true;
+        profile.isRealtor = true;
       }
     }
 
-    localStorage.setItem(
-      "profile",
-      JSON.stringify({ ...profile, isAdmin: isAdmin, isRealtor: isRealtor })
-    );
+    localStorage.setItem("profile", JSON.stringify({ ...profile }));
   }
 
   getProfile() {
