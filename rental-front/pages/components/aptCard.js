@@ -25,17 +25,25 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AptCard({ apt, onMouseOver }) {
+export default function AptCard({ apt, onMouseOver, setOpen }) {
   const classes = useStyles();
   const [city, setCity] = useState("");
+  const [img, setImg] = useState("");
   const Auth = new AuthService();
 
   const searchAddress = () => {
-    Auth.fetch(`/api/geocode?lat=${apt.lat}&lng=${apt.lng}`).then((res) => {
+    Auth.fetch(`/api/image?lat=${apt.lat}&lng=${apt.lng}`).then((res) => {
       if (res.city) {
         setCity(res.city);
+        setImg(res.img);
       }
     });
+  };
+
+  const handleDescription = (e) => {
+    e.preventDefault();
+    onMouseOver();
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -47,7 +55,7 @@ export default function AptCard({ apt, onMouseOver }) {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image="https://picsum.photos/200/300"
+          image={img.webformatURL}
           title={city}
         />
         {apt && (
@@ -66,10 +74,10 @@ export default function AptCard({ apt, onMouseOver }) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary" onClick={onMouseOver}>
-          On Map
+          Set Map
         </Button>
-        <Button size="small" color="primary" onClick={onMouseOver}>
-          Rent Now
+        <Button size="small" color="primary" onClick={handleDescription}>
+          More Info
         </Button>
       </CardActions>
     </Card>

@@ -5,6 +5,7 @@ import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AuthService from "../../utils/authService";
 import { useState } from "react";
+import AptDescription from "./aptDescription";
 
 const useStyles = makeStyles((theme) => ({
   apartamentGrid: {
@@ -29,6 +30,7 @@ const Welcome = () => {
     Auth.fetch
   );
   const [focusApt, setFocusApt] = useState({});
+  const [open, setOpen] = useState(false);
 
   const handleFocusApt = (apt) => () => {
     setFocusApt(apt);
@@ -37,6 +39,7 @@ const Welcome = () => {
     <Container maxWidth="lg" component="main">
       <Grid container spacing={1} direction="row-reverse">
         <Grid item xs={12} sm={6} md={8}>
+          <AptDescription apt={focusApt} open={open} setOpen={setOpen} />
           <Paper className="paper" className={classes.apartamentGrid}>
             <Grid container spacing={2}>
               {!data ? (
@@ -47,7 +50,11 @@ const Welcome = () => {
                 data._embedded &&
                 data._embedded.apartments.map((apt) => (
                   <Grid item xs={12} md={6} key={apt.name}>
-                    <AptCard apt={apt} onMouseOver={handleFocusApt(apt)} />
+                    <AptCard
+                      apt={apt}
+                      setOpen={setOpen}
+                      onMouseOver={handleFocusApt(apt)}
+                    />
                   </Grid>
                 ))
               )}
