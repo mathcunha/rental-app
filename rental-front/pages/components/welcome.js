@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     width: 350,
     height: 500,
   },
+  container: {
+    direction: "row-reverse",
+  },
 }));
 
 const Welcome = () => {
@@ -32,12 +35,7 @@ const Welcome = () => {
   };
   return (
     <Container maxWidth="lg" component="main">
-      <Grid container spacing={1}>
-        <Grid item xs={12} sm={6} md={4}>
-          <Paper className="paper" className={classes.mapGrid}>
-            <GoogleMaps data={data} marker={focusApt} />
-          </Paper>
-        </Grid>
+      <Grid container spacing={1} direction="row-reverse">
         <Grid item xs={12} sm={6} md={8}>
           <Paper className="paper" className={classes.apartamentGrid}>
             <Grid container spacing={2}>
@@ -54,6 +52,11 @@ const Welcome = () => {
                 ))
               )}
             </Grid>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <Paper className="paper" className={classes.mapGrid}>
+            <GoogleMaps data={data} marker={focusApt} />
           </Paper>
         </Grid>
       </Grid>

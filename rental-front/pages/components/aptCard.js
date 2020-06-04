@@ -8,13 +8,20 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import AuthService from "../../utils/authService";
+import theme from "../../src/theme";
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 300,
+    maxWidth: "30vw",
+    [theme.breakpoints.only("sm")]: {
+      maxWidth: "50vw",
+    },
+    [theme.breakpoints.only("xs")]: {
+      maxWidth: "95vw",
+    },
   },
   media: {
-    height: 140,
+    height: 150,
   },
 });
 
@@ -58,7 +65,10 @@ export default function AptCard({ apt, onMouseOver }) {
         )}
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={onMouseOver}>
+          On Map
+        </Button>
+        <Button size="small" color="primary" onClick={onMouseOver}>
           Rent Now
         </Button>
       </CardActions>
