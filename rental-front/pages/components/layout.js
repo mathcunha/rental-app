@@ -12,7 +12,6 @@ import Menu from "@material-ui/core/Menu";
 import { CssBaseline, Container, Box, Button, Grid } from "@material-ui/core";
 import Copyright from "./copyright";
 import AuthService from "../../utils/authService";
-import Link from "../../src/Link";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -22,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   heroContent: {
-    padding: theme.spacing(10, 0, 6),
+    padding: theme.spacing(4, 0, 6),
   },
   footer: {
     borderTop: `1px solid ${theme.palette.divider}`,

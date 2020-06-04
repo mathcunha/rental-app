@@ -15,6 +15,7 @@ import {
   Select,
   InputBase,
   IconButton,
+  OutlinedInput,
 } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -300,21 +301,21 @@ const EditApt = ({ apt, router }) => {
             />
           </Grid>
           <Grid item xs={6}>
-            <Paper>
-              <InputBase
-                value={address}
-                onChange={handleChange("address")}
-                placeholder="Search Apt Address"
-                inputProps={{ "aria-label": "search apt address" }}
-              />
-              <IconButton
-                type="submit"
-                aria-label="search"
-                onClick={handleSearchAddress}
-              >
-                <SearchIcon />
-              </IconButton>
-            </Paper>
+            <OutlinedInput
+              value={address}
+              onChange={handleChange("address")}
+              placeholder="Search Apt Address"
+              inputProps={{ "aria-label": "search apt address" }}
+              endAdornment={
+                <IconButton
+                  type="submit"
+                  aria-label="search"
+                  onClick={handleSearchAddress}
+                >
+                  <SearchIcon />
+                </IconButton>
+              }
+            />
           </Grid>
           <Grid item xs={3}>
             <TextField
