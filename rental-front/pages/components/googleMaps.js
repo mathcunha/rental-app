@@ -33,6 +33,14 @@ const GoogleMaps = ({ google, data, marker, width }) => {
     }
   }, width);
 
+  const [activeMarker, setActiveMarker] = useState({});
+  const [showingInfoWindow, setShowingInfoWindow] = useState(false);
+
+  const onMarkerClick = (props, marker, e) => {
+    setActiveMarker(marker);
+    setShowingInfoWindow(true);
+  };
+
   const classes = useStyles();
   return (
     <Map
@@ -48,12 +56,21 @@ const GoogleMaps = ({ google, data, marker, width }) => {
         data._embedded &&
         data._embedded.apartments.map((apt) => (
           <Marker
-            draggable={true}
+            draggable={false}
+            name={apt.name}
             title={`${apt.name} - ${apt.room} rooms`}
             position={{ lat: apt.lat, lng: apt.lng }}
             key={apt.name}
+            onClick={onMarkerClick}
           ></Marker>
         ))}
+
+      <InfoWindow marker={activeMarker} visible={showingInfoWindow}>
+        <div>
+          <h3>{activeMarker.name}</h3>
+          <h4>{activeMarker.title}</h4>
+        </div>
+      </InfoWindow>
     </Map>
   );
 };
