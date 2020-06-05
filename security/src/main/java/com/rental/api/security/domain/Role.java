@@ -1,13 +1,6 @@
 package com.rental.api.security.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -15,7 +8,8 @@ import org.hibernate.annotations.NaturalId;
 @Table(name = "roles")
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="roles_seq")
+    @SequenceGenerator(name="roles_seq", allocationSize=1)
     private Long id;
 
     @Enumerated(EnumType.STRING)
