@@ -19,11 +19,16 @@ import SearchIcon from "@material-ui/icons/Search";
 function UserRow({ row }) {
   const arr = row._links.self.href.split("/");
   const id = arr[arr.length - 1];
+  const role = row.authorities.reduce(
+    (acc, curr) => (acc === "" ? curr.authority : curr.authority + ", " + acc),
+    ""
+  );
   return (
     <TableRow>
       <TableCell>{row.name}</TableCell>
       <TableCell>{row.username}</TableCell>
       <TableCell>{row.email}</TableCell>
+      <TableCell>{role}</TableCell>
       <TableCell>
         <Link href="/admin/users/[id]" as={`/admin/users/${id}`}>
           <IconButton>
@@ -95,6 +100,7 @@ const UserList = () => {
                 <TableCell>Name</TableCell>
                 <TableCell>Username</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Role</TableCell>
                 <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
