@@ -73,7 +73,7 @@ const UserList = () => {
         <Grid item xs={3}>
           <TextField
             id="input-email"
-            label="Eemail"
+            label="Email"
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}

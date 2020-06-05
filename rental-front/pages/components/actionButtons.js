@@ -34,7 +34,7 @@ const ActionButtons = ({
         <Alert severity="success" />
       </Snackbar>
       <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
         autoHideDuration={1000}
         open={error !== ""}
       >
