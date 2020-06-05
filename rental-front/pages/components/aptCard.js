@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 export default function AptCard({ apt, onMouseOver, setOpen, onRent }) {
   const classes = useStyles();
   const [city, setCity] = useState("");
-  const [img, setImg] = useState("");
+  const [img, setImg] = useState({});
   const Auth = new AuthService();
 
   const searchAddress = () => {
@@ -55,7 +55,7 @@ export default function AptCard({ apt, onMouseOver, setOpen, onRent }) {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={img.webformatURL}
+          image={img ? img.webformatURL : "https://picsum.photos/200/300"}
           title={city}
         />
         {apt && (

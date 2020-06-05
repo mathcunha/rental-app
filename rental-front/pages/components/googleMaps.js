@@ -27,7 +27,7 @@ const GoogleMaps = ({ google, data, marker, width }) => {
     if ("sm" === width) {
       setMapWidth("45vw");
     } else if ("xs" === width) {
-      setMapWidth("90vw");
+      setMapWidth("84vw");
     } else {
       setMapWidth("30vw");
     }

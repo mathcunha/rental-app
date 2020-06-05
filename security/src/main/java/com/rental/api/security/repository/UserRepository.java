@@ -1,6 +1,8 @@
 package com.rental.api.security.repository;
 
 import com.rental.api.security.domain.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.data.rest.core.annotation.RestResource;
@@ -14,6 +16,9 @@ import java.util.Optional;
 public interface UserRepository extends Repository<User, Long> {
     @RestResource(exported = false)
     Optional<User> findByUsername(String username);
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (user.id == authentication.principal.id)")
+    void delete(User user);
 
     @RestResource(exported = true)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -29,4 +34,7 @@ public interface UserRepository extends Repository<User, Long> {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     Iterable<User> findAll();
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    Page<User> findByEmailIgnoreCaseStartingWithAndNameIgnoreCaseStartingWith(String email, String name, Pageable pageable);
 }

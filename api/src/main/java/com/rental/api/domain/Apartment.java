@@ -1,6 +1,8 @@
 package com.rental.api.domain;
 
 import com.rental.api.security.domain.User;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -52,6 +54,7 @@ public class Apartment {
     @NotNull(message = "Apartment realtor is required")
     @ManyToOne
     @JoinColumn(updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @NotNull

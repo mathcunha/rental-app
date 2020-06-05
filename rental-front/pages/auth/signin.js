@@ -155,7 +155,7 @@ function Signip() {
           </div>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="/users/new" variant="body2">
+              <Link href="/admin/users/new" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

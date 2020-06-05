@@ -12,6 +12,9 @@ import FetcherError from "../../components/fetcherError";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import Link from "../../../src/Link";
+import { useState } from "react";
+import { TextField, Typography, InputAdornment } from "@material-ui/core";
+import SearchIcon from "@material-ui/icons/Search";
 
 function UserRow({ row }) {
   const arr = row._links.self.href.split("/");
@@ -33,16 +36,57 @@ function UserRow({ row }) {
 }
 
 const UserList = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const Auth = new AuthService();
   const url =
     Auth.getProfile().isAdmin === true
-      ? `${process.env.API_URL}/users`
+      ? `${process.env.API_URL}/users/search/findByEmailIgnoreCaseStartingWithAndNameIgnoreCaseStartingWith?name=${name}&email=${email}&sort=name`
       : `${process.env.API_URL}/users/${Auth.getProfile().id}`;
 
   const { data, error } = useSWR(url, Auth.fetch);
 
   return (
     <LayoutAdmin>
+      <Grid container spacing={2}>
+        <Grid item xs={3}>
+          <Typography component="h1" variant="h6">
+            Users
+          </Typography>
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            id="input-name"
+            label="Name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            id="input-email"
+            label="Eemail"
+            type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon color="action" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
+      </Grid>
       <Grid item xs={12}>
         <Paper className="paper">
           <Table size="small">

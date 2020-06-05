@@ -21,13 +21,14 @@ import Link from "../../../src/Link";
 import { useState } from "react";
 import UserSelect from "../../components/userSelect";
 import { TablePagination } from "@material-ui/core";
+import GoogleMaps from "../../components/googleMaps";
 
-function AptRow({ row }) {
+function AptRow({ row, onMouseOver }) {
   const arr = row._links.self.href.split("/");
   const id = arr[arr.length - 1];
 
   return (
-    <TableRow>
+    <TableRow onMouseOver={onMouseOver}>
       <TableCell>{row.name}</TableCell>
       <TableCell>{row.aptSize}</TableCell>
       <TableCell>{row.price}</TableCell>
@@ -92,6 +93,12 @@ const TripList = () => {
   }/apartments/search/filter?size=${size}&page=${page}&sort=name${filterURI()}`;
   const { data, error } = Auth.getProfile() && useSWR(url, Auth.fetch);
 
+  const [focusApt, setFocusApt] = useState({});
+
+  const handleFocusApt = (apt) => () => {
+    setFocusApt(apt);
+  };
+
   return (
     <LayoutAdmin>
       <Grid container spacing={2}>
@@ -129,7 +136,7 @@ const TripList = () => {
         <Grid item xs={3} sm={2}>
           <TextField
             id="input-price"
-            label="price"
+            label="Price"
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
@@ -159,51 +166,59 @@ const TripList = () => {
           />
         </Grid>
       </Grid>
-
-      <Grid item xs={12}>
-        <Paper className="paper">
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Floor Area</TableCell>
-                <TableCell>Price per Month</TableCell>
-                <TableCell>Available</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {error ? (
+      <Grid container>
+        <Grid item xs={12} sm={6} md={8}>
+          <Paper className="paper">
+            <Table size="small">
+              <TableHead>
                 <TableRow>
-                  <FetcherError error={error} />
+                  <TableCell>Name</TableCell>
+                  <TableCell>Floor Area</TableCell>
+                  <TableCell>Price per Month</TableCell>
+                  <TableCell>Available</TableCell>
+                  <TableCell>Action</TableCell>
                 </TableRow>
-              ) : !data ? (
-                <TableRow>
-                  <TableCell>"loading data"</TableCell>
-                </TableRow>
-              ) : data._embedded ? (
-                data._embedded.apartments.map((row) => (
-                  <AptRow row={row} key={row._links.self.href} />
-                ))
-              ) : (
-                <UserRow row={data} />
-              )}
-            </TableBody>
-          </Table>
-          {data && data.page ? (
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={data.page.totalElements}
-              rowsPerPage={size}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-          ) : (
-            ""
-          )}
-        </Paper>
+              </TableHead>
+              <TableBody>
+                {error ? (
+                  <TableRow>
+                    <FetcherError error={error} />
+                  </TableRow>
+                ) : !data ? (
+                  <TableRow>
+                    <TableCell>"loading data"</TableCell>
+                  </TableRow>
+                ) : data._embedded ? (
+                  data._embedded.apartments.map((row) => (
+                    <AptRow
+                      row={row}
+                      key={row._links.self.href}
+                      onMouseOver={handleFocusApt(row)}
+                    />
+                  ))
+                ) : (
+                  <UserRow row={data} />
+                )}
+              </TableBody>
+            </Table>
+            {data && data.page ? (
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={data.page.totalElements}
+                rowsPerPage={size}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            ) : (
+              ""
+            )}
+          </Paper>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <GoogleMaps data={data} marker={focusApt} />
+        </Grid>
       </Grid>
     </LayoutAdmin>
   );

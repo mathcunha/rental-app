@@ -106,7 +106,7 @@ const Welcome = ({ router }) => {
           <Grid item xs={3} sm={2}>
             <TextField
               id="input-price"
-              label="price"
+              label="Price"
               type="number"
               value={price}
               onChange={(e) => setPrice(e.target.value)}

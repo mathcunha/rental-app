@@ -92,7 +92,6 @@ const Layout = ({ router, children }) => {
             open={open}
             onClose={handleClose("")}
           >
-            <MenuItem onClick={handleClose("myrentals")}>My rentals</MenuItem>
             <MenuItem onClick={handleClose("myaccount")}>My account</MenuItem>
             <MenuItem onClick={handleClose("logout")}>Logout</MenuItem>
             {Auth.getProfile().isAdmin || Auth.getProfile().isRealtor ? (
