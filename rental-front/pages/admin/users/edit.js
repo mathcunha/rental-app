@@ -8,6 +8,8 @@ import AuthService from "../../../utils/authService";
 import FormControlValidation from "../../../utils/formControlValidation";
 import ActionButtons from "../../components/actionButtons";
 import { withRouter } from "next/router";
+import { IconButton, Tooltip } from "@material-ui/core";
+import HomeWorkIcon from "@material-ui/icons/HomeWork";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -90,6 +92,30 @@ const EditUser = ({ user, router }) => {
     router.push("/admin/users/list");
   };
 
+  const toggleRealtor = (e) => {
+    if (Auth.getProfile().isAdmin) {
+      e.preventDefault();
+      setLoading(true);
+      setAction("save");
+      setError("");
+      const link = user._links.self.href.split("/");
+      Auth.fetch(
+        `${process.env.API_HOST}/user/${link[link.length - 1]}/toggleRealtor`,
+        {
+          method: "POST",
+        }
+      )
+        .then((res) => {
+          setSuccess(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          setError({ status: err.status, json: "not authorized" });
+          setLoading(false);
+        });
+    }
+  };
+
   const handleSave = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -109,6 +135,11 @@ const EditUser = ({ user, router }) => {
       });
   };
 
+  const isRealtor =
+    user.authorities.filter(
+      (authority) => authority.authority === "ROLE_REALTOR"
+    ).length === 1;
+
   const passwordError = FormControlValidation(error, "password");
   const emailError = FormControlValidation(error, "email");
   const usernameError = FormControlValidation(error, "username");
@@ -118,6 +149,18 @@ const EditUser = ({ user, router }) => {
     <Paper className="paper">
       <Typography component="h1" variant="h5">
         User
+        {Auth.getProfile().isAdmin ? (
+          <Tooltip title="Toggle Realtor">
+            <IconButton
+              onClick={toggleRealtor}
+              color={isRealtor ? "primary" : "default"}
+            >
+              <HomeWorkIcon />
+            </IconButton>
+          </Tooltip>
+        ) : (
+          " "
+        )}
       </Typography>
       <form className={classes.form} noValidate>
         <Grid container spacing={2}>
