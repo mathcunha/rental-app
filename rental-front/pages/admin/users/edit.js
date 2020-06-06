@@ -136,6 +136,8 @@ const EditUser = ({ user, router }) => {
   };
 
   const isRealtor =
+    user &&
+    user.authorities &&
     user.authorities.filter(
       (authority) => authority.authority === "ROLE_REALTOR"
     ).length === 1;
