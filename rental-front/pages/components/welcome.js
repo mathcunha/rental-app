@@ -81,7 +81,7 @@ const Welcome = ({ router }) => {
   return (
     <Fragment>
       <Container className={classes.container}>
-        <Grid container maxWidth="xs" spacing={1}>
+        <Grid container spacing={1}>
           <Grid item xs={3}>
             <Typography component="h1" variant="h6">
               Search

@@ -1,14 +1,17 @@
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
 import { useState, useEffect } from "react";
 import AuthService from "../../../utils/authService";
 import FormControlValidation from "../../../utils/formControlValidation";
 import ActionButtons from "../../components/actionButtons";
 import { withRouter } from "next/router";
-import { IconButton, Tooltip } from "@material-ui/core";
+import {
+  TextField,
+  Paper,
+  Grid,
+  Typography,
+  FormControlLabel,
+  Switch,
+} from "@material-ui/core";
 import HomeWorkIcon from "@material-ui/icons/HomeWork";
 
 const useStyles = makeStyles((theme) => ({
@@ -151,19 +154,8 @@ const EditUser = ({ user, router }) => {
     <Paper className="paper">
       <Typography component="h1" variant="h5">
         User
-        {Auth.getProfile().isAdmin ? (
-          <Tooltip title="Toggle Realtor">
-            <IconButton
-              onClick={toggleRealtor}
-              color={isRealtor ? "primary" : "default"}
-            >
-              <HomeWorkIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          " "
-        )}
       </Typography>
+      <Typography component="h1" variant="h5"></Typography>
       <form className={classes.form} noValidate>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -218,7 +210,7 @@ const EditUser = ({ user, router }) => {
               }}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={Auth.getProfile().isAdmin ? 8 : 12}>
             <TextField
               error={passwordError != ""}
               helperText={passwordError}
@@ -233,6 +225,22 @@ const EditUser = ({ user, router }) => {
               onChange={handleChange("password")}
             />
           </Grid>
+          {Auth.getProfile().isAdmin ? (
+            <Grid item xs={4}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={isRealtor}
+                    onChange={toggleRealtor}
+                    name="realtor"
+                  />
+                }
+                label="Realtor"
+              />
+            </Grid>
+          ) : (
+            " "
+          )}
         </Grid>
 
         <ActionButtons
