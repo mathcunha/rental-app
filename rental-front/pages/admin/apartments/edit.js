@@ -209,7 +209,7 @@ const EditApt = ({ apt, router }) => {
           </Grid>
           <Grid item xs={3}>
             <InputLabel shrink={true} id="available-label">
-              Available
+              State
             </InputLabel>
             <Select
               labelId="available-label"
@@ -219,10 +219,10 @@ const EditApt = ({ apt, router }) => {
               onChange={handleChange("available")}
             >
               <MenuItem value={true}>
-                <em>True</em>
+                <em>Available</em>
               </MenuItem>
               <MenuItem value={false}>
-                <em>False</em>
+                <em>Rented</em>
               </MenuItem>
             </Select>
           </Grid>
