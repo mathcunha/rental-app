@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Welcome = ({ router }) => {
   const classes = useStyles();
-  const [aptSize, setAptSize] = useState(0);
-  const [price, setPrice] = useState(0);
-  const [room, setRoom] = useState(0);
+  const [aptSize, setAptSize] = useState("");
+  const [price, setPrice] = useState("");
+  const [room, setRoom] = useState("");
   const filterURI = () => {
     let uri = "";
 
@@ -78,6 +78,23 @@ const Welcome = ({ router }) => {
     }
     setFocusApt(apt);
   };
+  const handleChange = (input) => (e) => {
+    let value = parseFloat(e.target.value);
+    switch (input) {
+      case "aptSize":
+        setAptSize(isNaN(value) ? room : Math.abs(value));
+        break;
+      case "price":
+        setPrice(isNaN(value) ? room : Math.abs(value));
+        break;
+      case "room":
+        value = parseInt(e.target.value);
+        setRoom(isNaN(value) ? room : Math.abs(value));
+        break;
+      default:
+        break;
+    }
+  };
   return (
     <Fragment>
       <Container className={classes.container}>
@@ -93,7 +110,7 @@ const Welcome = ({ router }) => {
               label="Size"
               type="number"
               value={aptSize}
-              onChange={(e) => setAptSize(e.target.value)}
+              onChange={handleChange("aptSize")}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -109,7 +126,7 @@ const Welcome = ({ router }) => {
               label="Price"
               type="number"
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
+              onChange={handleChange("price")}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -125,7 +142,7 @@ const Welcome = ({ router }) => {
               label="Room"
               type="number"
               value={room}
-              onChange={(e) => setRoom(e.target.value)}
+              onChange={handleChange("room")}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -144,23 +161,22 @@ const Welcome = ({ router }) => {
             <AptRent open={openRent} setOpen={setOpenRent} />
             <Paper className="paper" className={classes.apartamentGrid}>
               <Grid container spacing={2}>
-                {!data ? (
-                  <Grid item xs={12} md={6}>
-                    Loading
-                  </Grid>
-                ) : (
-                  data._embedded &&
-                  data._embedded.apartments.map((apt) => (
-                    <Grid item xs={12} md={6} key={apt.name}>
-                      <AptCard
-                        apt={apt}
-                        setOpen={setOpen}
-                        onRent={handleRent(apt)}
-                        onMouseOver={handleFocusApt(apt)}
-                      />
-                    </Grid>
-                  ))
-                )}
+                <Grid item xs={12} md={6}>
+                  {!data
+                    ? "Loading"
+                    : data._embedded && data._embedded.apartments.length === 0
+                    ? "No Results Found"
+                    : data._embedded &&
+                      data._embedded.apartments.map((apt) => (
+                        <AptCard
+                          apt={apt}
+                          setOpen={setOpen}
+                          onRent={handleRent(apt)}
+                          onMouseOver={handleFocusApt(apt)}
+                          key={apt.name}
+                        />
+                      ))}
+                </Grid>
               </Grid>
             </Paper>
           </Grid>

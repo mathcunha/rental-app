@@ -13,7 +13,6 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  InputBase,
   IconButton,
   OutlinedInput,
 } from "@material-ui/core";
@@ -81,7 +80,8 @@ const EditApt = ({ apt, router }) => {
         setAvailable(e.target.value);
         break;
       case "room":
-        setRoom(e.target.value);
+        const value = parseInt(e.target.value);
+        setRoom(isNaN(value) ? room : value);
         break;
       case "lat":
         setLat(e.target.value);

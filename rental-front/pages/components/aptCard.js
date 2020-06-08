@@ -52,12 +52,12 @@ export default function AptCard({ apt, onMouseOver, setOpen, onRent }) {
 
   return (
     <Card className={classes.root}>
+      <CardMedia
+        className={classes.media}
+        image={img ? img.webformatURL : "https://picsum.photos/200/300"}
+        title={city}
+      />
       <CardActionArea>
-        <CardMedia
-          className={classes.media}
-          image={img ? img.webformatURL : "https://picsum.photos/200/300"}
-          title={city}
-        />
         {apt && (
           <CardContent onMouseOver={onMouseOver}>
             <Typography gutterBottom variant="h5" component="h2">
@@ -67,7 +67,7 @@ export default function AptCard({ apt, onMouseOver, setOpen, onRent }) {
               {`${apt.room} rooms . ${apt.aptSize}`} m<sup>2</sup>
             </Typography>
             <Typography variant="overline" color="textSecondary" component="p">
-              {`U$ ${apt.price}/month`}
+              {`$${apt.price}/month`}
             </Typography>
           </CardContent>
         )}

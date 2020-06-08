@@ -2,31 +2,29 @@ import React from "react";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListSubheader from "@material-ui/core/ListSubheader";
 import PublicIcon from "@material-ui/icons/Public";
+import ApartmentIcon from "@material-ui/icons/Apartment";
 import LoyaltyIcon from "@material-ui/icons/Loyalty";
 import PeopleIcon from "@material-ui/icons/People";
-import BarChartIcon from "@material-ui/icons/BarChart";
-import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import Link from "../src/Link";
 
 export const mainListItems = (
   <div>
-    <Link href="/admin/apartments/list">
+    <Link href="/">
       <ListItem button>
         <ListItemIcon>
           <LoyaltyIcon />
         </ListItemIcon>
-        <ListItemText primary="Apartments" />
+        <ListItemText primary="Home" />
       </ListItem>
     </Link>
     <Link href="/admin/apartments/list">
       <ListItem button>
         <ListItemIcon>
-          <PublicIcon />
+          <ApartmentIcon />
         </ListItemIcon>
-        <ListItemText primary="Rentals" />
+        <ListItemText primary="Apartments" />
       </ListItem>
     </Link>
     <Link href="/admin/users/list">

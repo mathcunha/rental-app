@@ -11,6 +11,7 @@ const ActionButtons = ({
   loading,
   action,
   onSave,
+  saveLabel,
   onDelete,
   success,
   onSuccess,
@@ -45,7 +46,7 @@ const ActionButtons = ({
           <Grid item xs={6}>
             <ButtonSubmit
               onSubmit={onSave}
-              label="Save"
+              label={saveLabel ? saveLabel : "Update"}
               load={loading}
               action={action}
             />
@@ -68,7 +69,7 @@ const ActionButtons = ({
         <Grid item xs={12}>
           <ButtonSubmit
             onSubmit={onSave}
-            label="Save"
+            label={saveLabel ? saveLabel : "Save"}
             load={loading}
             action={action}
           />

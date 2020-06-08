@@ -11,8 +11,8 @@ import {
   Typography,
   FormControlLabel,
   Switch,
+  Tooltip,
 } from "@material-ui/core";
-import HomeWorkIcon from "@material-ui/icons/HomeWork";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -227,16 +227,21 @@ const EditUser = ({ user, router }) => {
           </Grid>
           {Auth.getProfile().isAdmin ? (
             <Grid item xs={4}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={isRealtor}
-                    onChange={toggleRealtor}
-                    name="realtor"
-                  />
-                }
-                label="Realtor"
-              />
+              <Tooltip
+                arrow={true}
+                title={isRealtor ? "Remove Realtor Role" : "Add Realtor Role"}
+              >
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isRealtor}
+                      onChange={toggleRealtor}
+                      name="realtor"
+                    />
+                  }
+                  label="Realtor"
+                />
+              </Tooltip>
             </Grid>
           ) : (
             " "
@@ -247,6 +252,7 @@ const EditUser = ({ user, router }) => {
           action={action}
           isNew={isNew()}
           onSave={handleSave}
+          saveLabel={isNew() ? "Sign Up" : "Update"}
           onDelete={handleDelete}
           loading={loading}
           success={success}
