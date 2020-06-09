@@ -10,7 +10,16 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
-const AptFilter = ({ name, price, setName, setPrice }) => {
+const AptFilter = ({
+  name,
+  price,
+  aptSize,
+  room,
+  setName,
+  setPrice,
+  setAptSize,
+  setRoom,
+}) => {
   const Auth = new AuthService();
   const { data, error } = useSWR(
     `${process.env.API_URL}/apartments/search/findAptFilterRange`,
@@ -38,6 +47,12 @@ const AptFilter = ({ name, price, setName, setPrice }) => {
       case "price":
         setPrice(newValue);
         break;
+      case "aptSize":
+        setAptSize(newValue);
+        break;
+      case "room":
+        setRoom(newValue);
+        break;
       default:
         break;
     }
@@ -45,12 +60,12 @@ const AptFilter = ({ name, price, setName, setPrice }) => {
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={3}>
+      <Grid item xs={12} sm={2}>
         <Typography component="h1" variant="h6">
-          Search
+          Filter
         </Typography>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={3} sm={2}>
         <TextField
           id="input-size"
           label="Name"
@@ -66,25 +81,29 @@ const AptFilter = ({ name, price, setName, setPrice }) => {
           }}
         />
       </Grid>
-      <Grid item xs={3}>
-        <TextField
-          id="input-size"
-          label="Location"
-          type="text"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon color="action" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={3} sm={2}>
         <Typography
           variant="caption"
           display="block"
-          id="room-range-slider"
+          id="size-range-slider"
+          gutterBottom
+        >
+          Floor Area Size m²
+        </Typography>
+        <Slider
+          value={aptSize}
+          onChange={handleChange("aptSize")}
+          aria-labelledby="size-range-slider"
+          valueLabelDisplay="auto"
+          min={stats.minAptSize}
+          max={stats.maxAptSize}
+        />
+      </Grid>
+      <Grid item xs={3} sm={2}>
+        <Typography
+          variant="caption"
+          display="block"
+          id="price-slider"
           gutterBottom
         >
           Price per Month $
@@ -96,6 +115,24 @@ const AptFilter = ({ name, price, setName, setPrice }) => {
           valueLabelDisplay="auto"
           min={stats.minPrice}
           max={stats.maxPrice}
+        />
+      </Grid>
+      <Grid item xs={3} sm={2}>
+        <Typography
+          variant="caption"
+          display="block"
+          id="room-slider"
+          gutterBottom
+        >
+          Number of Rooms
+        </Typography>
+        <Slider
+          value={room}
+          onChange={handleChange("room")}
+          aria-labelledby="room-slider"
+          valueLabelDisplay="auto"
+          min={stats.minRoom}
+          max={stats.maxRoom}
         />
       </Grid>
     </Grid>

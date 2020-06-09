@@ -1,21 +1,14 @@
 import useSWR from "swr";
 import GoogleMaps from "./googleMaps";
 import AptCard from "./aptCard";
-import {
-  Container,
-  Grid,
-  Paper,
-  TextField,
-  InputAdornment,
-  Typography,
-} from "@material-ui/core";
+import { Container, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AuthService from "../../utils/authService";
 import { useState, Fragment } from "react";
 import AptDescription from "./aptDescription";
-import SearchIcon from "@material-ui/icons/Search";
+
 import { withRouter } from "next/router";
-import AptRent from "./aptRent";
+
 import AptFilter from "./aptFilter";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,20 +32,21 @@ const Welcome = ({ router }) => {
   const classes = useStyles();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
+  const [aptSize, setAptSize] = useState(0);
+  const [room, setRoom] = useState(0);
   const filterURI = () => {
-    return `&price=${price}&name=${name}`;
+    return `&price=${price}&name=${name}&aptSize=${aptSize}&room=${room}`;
   };
 
   const Auth = new AuthService();
   const { data, error } = useSWR(
     `${
       process.env.API_URL
-    }/apartments/search/available?projection=publicApartment${filterURI()}&sort=price`,
+    }/apartments/search/filter?projection=publicApartment${filterURI()}&sort=price`,
     Auth.fetch
   );
   const [focusApt, setFocusApt] = useState({});
   const [open, setOpen] = useState(false);
-  const [openRent, setOpenRent] = useState(false);
 
   const handleFocusApt = (apt) => () => {
     setFocusApt(apt);
@@ -62,7 +56,8 @@ const Welcome = ({ router }) => {
     if (!Auth.loggedIn()) {
       router.push("/auth/signin");
     } else {
-      setOpenRent(true);
+      const arr = apt._links.self.href.split("/");
+      router.push(`/apt/${arr[arr.length - 1]}`);
     }
     setFocusApt(apt);
   };
@@ -70,6 +65,8 @@ const Welcome = ({ router }) => {
   const resetSearchFields = () => {
     setName("");
     setPrice(0);
+    setRoom(0);
+    setAptSize(0);
   };
 
   return (
@@ -80,13 +77,16 @@ const Welcome = ({ router }) => {
           price={price}
           setName={setName}
           setPrice={setPrice}
+          aptSize={aptSize}
+          room={room}
+          setRoom={setRoom}
+          setAptSize={setAptSize}
         />
       </Container>
       <Container maxWidth="lg" component="main">
         <Grid container spacing={1} direction="row-reverse">
           <Grid item xs={12} sm={6} md={8}>
             <AptDescription apt={focusApt} open={open} setOpen={setOpen} />
-            <AptRent open={openRent} setOpen={setOpenRent} />
             <Paper className="paper" className={classes.apartamentGrid}>
               <Grid container spacing={2}>
                 {!data ? (
