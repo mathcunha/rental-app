@@ -25,11 +25,45 @@ const useStyles = makeStyles({
   },
 });
 
-export default function AptCard({ apt, onMouseOver, setOpen, onRent }) {
+export default function AptCard({
+  apt,
+  onMouseOver,
+  setOpen,
+  onRent,
+  label,
+  resetSearchFields,
+}) {
   const classes = useStyles();
   const [city, setCity] = useState("");
   const [img, setImg] = useState({});
   const Auth = new AuthService();
+
+  if (label) {
+    return (
+      <Card className={classes.root}>
+        <CardMedia
+          className={classes.media}
+          image={"https://picsum.photos/200/300"}
+        />
+        <CardActionArea>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {label}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+        <CardActions>
+          <Button
+            size="small"
+            color="primary"
+            onClick={(e) => resetSearchFields()}
+          >
+            Reset Search Filter
+          </Button>
+        </CardActions>
+      </Card>
+    );
+  }
 
   const searchAddress = () => {
     Auth.fetch(`/api/image?lat=${apt.lat}&lng=${apt.lng}`).then((res) => {

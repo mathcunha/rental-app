@@ -16,6 +16,7 @@ import AptDescription from "./aptDescription";
 import SearchIcon from "@material-ui/icons/Search";
 import { withRouter } from "next/router";
 import AptRent from "./aptRent";
+import AptFilter from "./aptFilter";
 
 const useStyles = makeStyles((theme) => ({
   apartamentGrid: {
@@ -36,30 +37,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Welcome = ({ router }) => {
   const classes = useStyles();
-  const [aptSize, setAptSize] = useState("");
-  const [price, setPrice] = useState("");
-  const [room, setRoom] = useState("");
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
   const filterURI = () => {
-    let uri = "";
-
-    if (price !== "") {
-      uri += "&price=" + price;
-    }
-    if (room !== "") {
-      uri += "&room=" + room;
-    }
-    if (aptSize !== "") {
-      uri += "&aptSize=" + aptSize;
-    }
-
-    return uri;
+    return `&price=${price}&name=${name}`;
   };
 
   const Auth = new AuthService();
   const { data, error } = useSWR(
     `${
       process.env.API_URL
-    }/apartments/search/filter?projection=publicApartment&available=true${filterURI()}`,
+    }/apartments/search/available?projection=publicApartment${filterURI()}&sort=price`,
     Auth.fetch
   );
   const [focusApt, setFocusApt] = useState({});
@@ -78,81 +66,21 @@ const Welcome = ({ router }) => {
     }
     setFocusApt(apt);
   };
-  const handleChange = (input) => (e) => {
-    let value = parseFloat(e.target.value);
-    switch (input) {
-      case "aptSize":
-        setAptSize(isNaN(value) ? room : Math.abs(value));
-        break;
-      case "price":
-        setPrice(isNaN(value) ? room : Math.abs(value));
-        break;
-      case "room":
-        value = parseInt(e.target.value);
-        setRoom(isNaN(value) ? room : Math.abs(value));
-        break;
-      default:
-        break;
-    }
+
+  const resetSearchFields = () => {
+    setName("");
+    setPrice(0);
   };
+
   return (
     <Fragment>
       <Container className={classes.container}>
-        <Grid container spacing={1}>
-          <Grid item xs={3}>
-            <Typography component="h1" variant="h6">
-              Search
-            </Typography>
-          </Grid>
-          <Grid item xs={3} sm={2}>
-            <TextField
-              id="input-size"
-              label="Size"
-              type="number"
-              value={aptSize}
-              onChange={handleChange("aptSize")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={3} sm={2}>
-            <TextField
-              id="input-price"
-              label="Price"
-              type="number"
-              value={price}
-              onChange={handleChange("price")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-          <Grid item xs={3} sm={2}>
-            <TextField
-              id="input-room"
-              label="Room"
-              type="number"
-              value={room}
-              onChange={handleChange("room")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Grid>
-        </Grid>
+        <AptFilter
+          name={name}
+          price={price}
+          setName={setName}
+          setPrice={setPrice}
+        />
       </Container>
       <Container maxWidth="lg" component="main">
         <Grid container spacing={1} direction="row-reverse">
@@ -161,22 +89,33 @@ const Welcome = ({ router }) => {
             <AptRent open={openRent} setOpen={setOpenRent} />
             <Paper className="paper" className={classes.apartamentGrid}>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  {!data
-                    ? "Loading"
-                    : data._embedded && data._embedded.apartments.length === 0
-                    ? "No Results Found"
-                    : data._embedded &&
-                      data._embedded.apartments.map((apt) => (
-                        <AptCard
-                          apt={apt}
-                          setOpen={setOpen}
-                          onRent={handleRent(apt)}
-                          onMouseOver={handleFocusApt(apt)}
-                          key={apt.name}
-                        />
-                      ))}
-                </Grid>
+                {!data ? (
+                  <Grid item xs={12} md={6}>
+                    <AptCard
+                      label={"Loading data"}
+                      resetSearchFields={resetSearchFields}
+                    />
+                  </Grid>
+                ) : data._embedded && data._embedded.apartments.length === 0 ? (
+                  <Grid item xs={12} md={6}>
+                    <AptCard
+                      label={"No results found"}
+                      resetSearchFields={resetSearchFields}
+                    />
+                  </Grid>
+                ) : (
+                  data._embedded &&
+                  data._embedded.apartments.map((apt) => (
+                    <Grid item xs={12} md={6} key={apt.name}>
+                      <AptCard
+                        apt={apt}
+                        setOpen={setOpen}
+                        onRent={handleRent(apt)}
+                        onMouseOver={handleFocusApt(apt)}
+                      />
+                    </Grid>
+                  ))
+                )}
               </Grid>
             </Paper>
           </Grid>

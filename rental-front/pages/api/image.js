@@ -30,11 +30,20 @@ export default async (req, res) => {
         `https://pixabay.com/api/?key=${
           process.env.PIXABAY_KEY
         }&q=${encodeURIComponent(city)}&image_type=photo`
-      );
-      const body = await imgRes.json();
-
-      const { hits } = body && body.hits && body.hits.length;
-      res.status(200).json(JSON.stringify({ city: city, img: body.hits[0] }));
+      ).catch((err) => {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ message: "image api error", err: err }));
+      });
+      if (imgRes.status >= 200 && imgRes.status < 300) {
+        const body = await imgRes.json();
+        const { hits } = body && body.hits && body.hits.length;
+        res.status(200).json(JSON.stringify({ city: city, img: body.hits[0] }));
+      } else {
+        res.statusCode = 400;
+        res.setHeader("Content-Type", "application/json");
+        res.end(JSON.stringify({ message: "image api error" }));
+      }
     } else {
       res.statusCode = 404;
       res.setHeader("Content-Type", "application/json");
