@@ -8,10 +8,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 
@@ -46,9 +43,13 @@ public class Apartment {
     private Integer room;
 
     @NotNull
+    @Min(-90)
+    @Max(90)
     private Double lat;
 
     @NotNull
+    @Min(-180)
+    @Max(180)
     private Double lng;
 
     @NotNull(message = "Apartment realtor is required")

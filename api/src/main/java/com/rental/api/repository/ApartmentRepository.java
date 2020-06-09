@@ -1,6 +1,7 @@
 package com.rental.api.repository;
 
 import com.rental.api.domain.Apartment;
+import com.rental.api.domain.AptStats;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -34,4 +35,13 @@ public interface ApartmentRepository extends Repository<Apartment, Long> {
     )
     Page<Apartment> filter(Float aptSize, Float price, Integer room, Long userId, Boolean available, String projection, Pageable pageable);
 
+    @Query("select new com.rental.api.domain.AptStats(min(a.aptSize), min(a.price), min(a.room), max(a.aptSize), max(a.price), max(a.room)) from Apartment a where a.available = true")
+    public AptStats findAptFilterRange();
+
+    @RestResource(exported = true, path = "available", rel = "available")
+    Page<Apartment> findByNameIgnoreCaseStartingWithAndPriceGreaterThanEqualAndAvailableTrue(String name, Float price, Pageable pageable);
+
+    @Query("select a from Apartment a where a.id = ?1 and a.available = true")
+    @RestResource(exported = true, path = "rent", rel = "rent")
+    Apartment findToRent(Long id);
 }
