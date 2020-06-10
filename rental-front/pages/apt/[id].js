@@ -1,6 +1,7 @@
 import { withRouter } from "next/router";
 import AuthService from "../../utils/authService";
 import Layout from "../components/layout";
+import FormControlValidation from "../../utils/formControlValidation";
 import useSWR from "swr";
 import {
   Grid,
@@ -8,15 +9,14 @@ import {
   Container,
   Paper,
   TextField,
-  Button,
 } from "@material-ui/core";
 import { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Chip from "@material-ui/core/Chip";
-import TagFacesIcon from "@material-ui/icons/TagFaces";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import GroupIcon from "@material-ui/icons/Group";
 import PhotoSizeSelectActualIcon from "@material-ui/icons/PhotoSizeSelectActual";
+import ActionButtons from "../components/actionButtons";
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -43,6 +43,9 @@ const Rent = ({ router }) => {
     id &&
     `${process.env.API_URL}/apartments/search/rent?projection=publicApartment&id=${id}`;
   const [loading, setLoading] = useState(false);
+  const [saveError, setSaveError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [moveDate, setMoveDate] = useState("");
 
   const searchAddress = () => {
     return Auth.fetch(`/api/image?lat=${data.lat}&lng=${data.lng}`).then(
@@ -55,17 +58,49 @@ const Rent = ({ router }) => {
     );
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSuccess = (e) => {
+    router.push("/");
   };
 
   const { data, error } =
     Auth.getProfile() && Auth.getProfile().id ? useSWR(url, Auth.fetch) : {};
 
+  const getData = () => {
+    return {
+      moveDate: moveDate,
+      user: `${process.env.API_URL}/users/${Auth.getProfile().id}`,
+      apartment: {
+        price: data.price,
+        apartmentId: id,
+      },
+    };
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setSaveError("");
+
+    Auth.save("rents", getData())
+      .then((res) => {
+        setSuccess(true);
+        setLoading(false);
+      })
+      .catch((err) => {
+        err.response.json().then((json) => {
+          json.status = err.status;
+          setSaveError({ json });
+        });
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     data && searchAddress();
   }, [data]);
+
+  const priceError = FormControlValidation(saveError, "price");
+  const moveDateError = FormControlValidation(saveError, "moveDate");
 
   return (
     <Layout>
@@ -102,8 +137,12 @@ const Rent = ({ router }) => {
                   <TextField
                     fullWidth
                     type="date"
+                    error={moveDateError != ""}
+                    helperText={moveDateError}
                     required
                     fullWidth
+                    value={moveDate}
+                    onChange={(e) => setMoveDate(e.target.value)}
                     id="initialDate"
                     label="Move-in Date"
                     InputLabelProps={{
@@ -129,17 +168,16 @@ const Rent = ({ router }) => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    disabled={loading}
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    onClick={handleSubmit}
-                  >
-                    Rent
-                  </Button>
+                  <ActionButtons
+                    action={"save"}
+                    isNew={true}
+                    onSave={handleSubmit}
+                    saveLabel={"Rent"}
+                    loading={loading}
+                    success={success}
+                    onSuccess={handleSuccess}
+                    error={saveError}
+                  />
                 </Grid>
               </Grid>
             )
