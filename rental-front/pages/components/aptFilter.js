@@ -7,8 +7,11 @@ import {
   Grid,
   TextField,
   InputAdornment,
+  Button,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import CloseIcon from "@material-ui/icons/Close";
+import withWidth from "@material-ui/core/withWidth";
 
 const AptFilter = ({
   name,
@@ -19,6 +22,8 @@ const AptFilter = ({
   setPrice,
   setAptSize,
   setRoom,
+  width,
+  onClick,
 }) => {
   const Auth = new AuthService();
   const { data, error } = useSWR(
@@ -60,12 +65,24 @@ const AptFilter = ({
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={2} sm={2} md={1}>
-        <Typography component="h1" variant="h6">
-          Filter
-        </Typography>
+      <Grid item xs={12} sm={2} md={1}>
+        {width && ("sm" === width || "xs" === width) ? (
+          <Button
+            variant="outlined"
+            size="small"
+            color="primary"
+            onClick={onClick}
+            startIcon={<CloseIcon />}
+          >
+            Hide
+          </Button>
+        ) : (
+          <Typography component="h1" variant="h6">
+            Filter
+          </Typography>
+        )}
       </Grid>
-      <Grid item xs={4} sm={4} md={2}>
+      <Grid item xs={6} sm={4} md={2}>
         <TextField
           id="input-size"
           label="Name"
@@ -139,4 +156,4 @@ const AptFilter = ({
   );
 };
 
-export default AptFilter;
+export default withWidth()(AptFilter);

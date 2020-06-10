@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   heroContent: {
-    padding: theme.spacing(4, 0, 6),
+    padding: theme.spacing(4, 0, 5),
   },
   footer: {
     borderTop: `1px solid ${theme.palette.divider}`,

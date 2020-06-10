@@ -1,13 +1,14 @@
 import useSWR from "swr";
 import GoogleMaps from "./googleMaps";
 import AptCard from "./aptCard";
-import { Container, Grid, Paper } from "@material-ui/core";
+import { Container, Grid, Paper, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AuthService from "../../utils/authService";
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import AptDescription from "./aptDescription";
-
+import withWidth from "@material-ui/core/withWidth";
 import { withRouter } from "next/router";
+import ListIcon from "@material-ui/icons/List";
 
 import AptFilter from "./aptFilter";
 
@@ -23,12 +24,18 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    margin: theme.spacing(0, 0, 4),
-    padding: theme.spacing(0, 5, 1),
+    margin: theme.spacing(0, 0, 2),
+    padding: theme.spacing(0, 1, 1),
+  },
+  containerHidden: {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+    margin: theme.spacing(0, 0, 2),
+    padding: theme.spacing(0, 1, 1),
+    display: "none",
   },
 }));
 
-const Welcome = ({ router }) => {
+const Welcome = ({ router, width }) => {
   const classes = useStyles();
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
@@ -47,6 +54,15 @@ const Welcome = ({ router }) => {
   );
   const [focusApt, setFocusApt] = useState({});
   const [open, setOpen] = useState(false);
+  const [showFilter, setShowFilter] = useState(true);
+
+  useEffect(() => {
+    setShowFilter(width && !("sm" === width || "xs" === width));
+  }, width);
+  const handleShowFilter = (e) => {
+    e.preventDefault();
+    setShowFilter(!showFilter);
+  };
 
   const handleFocusApt = (apt) => () => {
     setFocusApt(apt);
@@ -71,7 +87,30 @@ const Welcome = ({ router }) => {
 
   return (
     <Fragment>
-      <Container className={classes.container}>
+      <Container
+        className={
+          showFilter === false ? classes.container : classes.containerHidden
+        }
+      >
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <Button
+              variant="outlined"
+              size="small"
+              color="primary"
+              onClick={handleShowFilter}
+              startIcon={<ListIcon />}
+            >
+              Filter
+            </Button>
+          </Grid>
+        </Grid>
+      </Container>
+      <Container
+        className={
+          showFilter === true ? classes.container : classes.containerHidden
+        }
+      >
         <AptFilter
           name={name}
           price={price}
@@ -81,6 +120,7 @@ const Welcome = ({ router }) => {
           room={room}
           setRoom={setRoom}
           setAptSize={setAptSize}
+          onClick={handleShowFilter}
         />
       </Container>
       <Container maxWidth="lg" component="main">
@@ -130,4 +170,4 @@ const Welcome = ({ router }) => {
   );
 };
 
-export default withRouter(Welcome);
+export default withWidth()(withRouter(Welcome));
