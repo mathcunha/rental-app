@@ -117,7 +117,7 @@ const TripList = () => {
         <Grid item xs={6} sm={2}>
           <UserSelect onChange={(e) => setUser(e.target.value)} value={user} />
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid item xs={4} sm={2}>
           <TextField
             id="input-size"
             label="Size"
@@ -133,7 +133,7 @@ const TripList = () => {
             }}
           />
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid item xs={4} sm={2}>
           <TextField
             id="input-price"
             label="Price"
@@ -149,7 +149,7 @@ const TripList = () => {
             }}
           />
         </Grid>
-        <Grid item xs={3} sm={2}>
+        <Grid item xs={4} sm={2}>
           <TextField
             id="input-room"
             label="Room"

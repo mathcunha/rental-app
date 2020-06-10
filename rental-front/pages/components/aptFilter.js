@@ -60,12 +60,12 @@ const AptFilter = ({
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={12} sm={2}>
+      <Grid item xs={2} sm={2} md={1}>
         <Typography component="h1" variant="h6">
           Filter
         </Typography>
       </Grid>
-      <Grid item xs={3} sm={2}>
+      <Grid item xs={4} sm={4} md={2}>
         <TextField
           id="input-size"
           label="Name"
@@ -81,7 +81,7 @@ const AptFilter = ({
           }}
         />
       </Grid>
-      <Grid item xs={3} sm={2}>
+      <Grid item xs={6} sm={6} md={3}>
         <Typography
           variant="caption"
           display="block"
@@ -99,7 +99,7 @@ const AptFilter = ({
           max={stats.maxAptSize}
         />
       </Grid>
-      <Grid item xs={3} sm={2}>
+      <Grid item xs={6} sm={6} md={3}>
         <Typography
           variant="caption"
           display="block"
@@ -117,7 +117,7 @@ const AptFilter = ({
           max={stats.maxPrice}
         />
       </Grid>
-      <Grid item xs={3} sm={2}>
+      <Grid item xs={6} sm={6} md={3}>
         <Typography
           variant="caption"
           display="block"

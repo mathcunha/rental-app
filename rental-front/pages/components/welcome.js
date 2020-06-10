@@ -42,7 +42,7 @@ const Welcome = ({ router }) => {
   const { data, error } = useSWR(
     `${
       process.env.API_URL
-    }/apartments/search/filter?projection=publicApartment${filterURI()}&sort=price`,
+    }/apartments/search/filter?projection=publicApartment${filterURI()}&available=true&sort=price`,
     Auth.fetch
   );
   const [focusApt, setFocusApt] = useState({});
