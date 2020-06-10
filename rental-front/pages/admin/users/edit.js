@@ -83,6 +83,7 @@ const EditUser = ({ user, router }) => {
     setLoading(true);
     Auth.delete(endpoint)
       .then((res) => {
+        Auth.logout();
         router.push("/admin/users/list");
       })
       .catch((err) => {
