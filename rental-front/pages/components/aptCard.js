@@ -66,12 +66,14 @@ export default function AptCard({
   }
 
   const searchAddress = () => {
-    Auth.fetch(`/api/image?lat=${apt.lat}&lng=${apt.lng}`).then((res) => {
-      if (res.city) {
-        setCity(res.city);
-        setImg(res.img);
-      }
-    });
+    Auth.fetch(`/api/image?lat=${apt.lat}&lng=${apt.lng}`)
+      .then((res) => {
+        if (res.city) {
+          setCity(res.city);
+          setImg(res.img);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleDescription = (e) => {
@@ -88,7 +90,11 @@ export default function AptCard({
     <Card className={classes.root}>
       <CardMedia
         className={classes.media}
-        image={img ? img.webformatURL : "https://picsum.photos/200/300"}
+        image={
+          img && img.webformatURL
+            ? img.webformatURL
+            : "https://picsum.photos/200/300"
+        }
         title={city}
       />
       <CardActionArea>

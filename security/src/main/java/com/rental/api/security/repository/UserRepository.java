@@ -17,7 +17,7 @@ public interface UserRepository extends Repository<User, Long> {
     @RestResource(exported = false)
     Optional<User> findByUsername(String username);
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (user.id == authentication.principal.id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (#user.id == authentication.principal.id)")
     void delete(User user);
 
     @RestResource(exported = true)

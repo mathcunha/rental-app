@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin
 public interface ApartmentRepository extends Repository<Apartment, Long> {
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #apt.user.id == authentication.principal.id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #apt.user != null && #apt.user.id == authentication.principal.id)")
     Apartment save(Apartment apt);
 
     @PreAuthorize("hasRole('ROLE_REALTOR') || hasRole('ROLE_ADMIN')")
-    @PostAuthorize("returnObject.user.id == authentication.principal.id || hasRole('ROLE_ADMIN')")
+    @PostAuthorize("hasRole('ROLE_ADMIN') || (returnObject.user != null && returnObject.user.id == authentication.principal.id)")
     @Query("select a from Apartment a where a.id = ?1")
     Apartment findById(Long id);
 

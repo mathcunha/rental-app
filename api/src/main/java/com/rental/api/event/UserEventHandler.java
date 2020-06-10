@@ -53,5 +53,13 @@ public class UserEventHandler {
                 user.setPassword(encoder.encode(user.getPassword()));
             }
         }
+
+        if(user.getName() != null) {
+            user.setName(user.getName().strip());
+        }
+
+        if(user.getUsername() != null) {
+            user.setUsername(user.getUsername().strip());
+        }
     }
 }
