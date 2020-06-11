@@ -58,6 +58,14 @@ const Rent = ({ router }) => {
     );
   };
 
+  const tokenExpired = () => {
+    Auth.fetch(`${process.env.API_HOST}/user`).catch((err) => {
+      Auth.logout();
+      router.push("/");
+    });
+    return "";
+  };
+
   const handleSuccess = (e) => {
     router.push("/");
   };
@@ -109,7 +117,9 @@ const Rent = ({ router }) => {
           {error ? (
             <Grid container spacing={1}>
               <Grid item xs={12}>
-                <Typography variant="h6">Apartment not found</Typography>
+                <Typography variant="h6">
+                  Apartment not found {tokenExpired()}
+                </Typography>
               </Grid>
             </Grid>
           ) : (
@@ -172,7 +182,7 @@ const Rent = ({ router }) => {
                     action={"save"}
                     isNew={true}
                     onSave={handleSubmit}
-                    saveLabel={"Rent"}
+                    saveLabel={"Confirm Rent"}
                     loading={loading}
                     success={success}
                     onSuccess={handleSuccess}
