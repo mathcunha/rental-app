@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Date;
@@ -27,6 +28,7 @@ public class Rent {
     private User user;
 
     @NotNull(message = "Please inform a move in date")
+    @FutureOrPresent
     private LocalDate moveDate;
 
     @Embedded
