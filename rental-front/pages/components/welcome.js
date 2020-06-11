@@ -46,11 +46,13 @@ const Welcome = ({ router, width }) => {
   };
 
   const Auth = new AuthService();
+  const fetcher = (url) => fetch(url).then((r) => r.json());
+
   const { data, error } = useSWR(
     `${
       process.env.API_URL
     }/apartments/search/filter?projection=publicApartment${filterURI()}&available=true&sort=price`,
-    Auth.fetch
+    fetcher
   );
   const [focusApt, setFocusApt] = useState({});
   const [open, setOpen] = useState(false);
@@ -129,7 +131,14 @@ const Welcome = ({ router, width }) => {
             <AptDescription apt={focusApt} open={open} setOpen={setOpen} />
             <Paper className="paper" className={classes.apartamentGrid}>
               <Grid container spacing={2}>
-                {!data ? (
+                {error ? (
+                  <Grid item xs={12} md={6}>
+                    <AptCard
+                      label={"Sorry... offline"}
+                      resetSearchFields={resetSearchFields}
+                    />
+                  </Grid>
+                ) : !data ? (
                   <Grid item xs={12} md={6}>
                     <AptCard
                       label={"Loading data"}
