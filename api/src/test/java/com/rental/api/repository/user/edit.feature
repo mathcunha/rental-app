@@ -131,3 +131,8 @@ Feature: Update/Delete user
     And header Authorization = 'Bearer ' + token1591810443819.token
     When method DELETE
     Then status 204
+
+    Given url location1591810321164
+    And header Authorization = 'Bearer ' + token1591810321164.token
+    When method DELETE
+    Then status 204
