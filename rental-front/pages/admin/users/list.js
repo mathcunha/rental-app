@@ -13,7 +13,12 @@ import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 import Link from "../../../src/Link";
 import { useState } from "react";
-import { TextField, Typography, InputAdornment } from "@material-ui/core";
+import {
+  TextField,
+  Typography,
+  InputAdornment,
+  TablePagination,
+} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
 function UserRow({ row }) {
@@ -44,9 +49,22 @@ const UserList = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const Auth = new AuthService();
+
+  const [size, setSize] = useState(5);
+  const [page, setPage] = useState(0);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setSize(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   const url =
     Auth.getProfile().isAdmin === true
-      ? `${process.env.API_URL}/users/search/findByEmailIgnoreCaseStartingWithAndNameIgnoreCaseStartingWith?name=${name}&email=${email}&sort=name`
+      ? `${process.env.API_URL}/users/search/findByEmailIgnoreCaseStartingWithAndNameIgnoreCaseStartingWith?size=${size}&page=${page}&name=${name}&email=${email}&sort=name`
       : `${process.env.API_URL}/users/${Auth.getProfile().id}`;
 
   const { data, error } = useSWR(url, Auth.fetch);
@@ -122,6 +140,19 @@ const UserList = () => {
               )}
             </TableBody>
           </Table>
+          {data && data.page ? (
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={data.page.totalElements}
+              rowsPerPage={size}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          ) : (
+            ""
+          )}
         </Paper>
       </Grid>
     </LayoutAdmin>
