@@ -83,7 +83,10 @@ const EditUser = ({ user, router }) => {
     setLoading(true);
     Auth.delete(endpoint)
       .then((res) => {
-        Auth.logout();
+        const arr = user._links.self.href.split("/");
+        if (arr[arr.length - 1] == Auth.getProfile().id) {
+          Auth.logout();
+        }
         router.push("/admin/users/list");
       })
       .catch((err) => {
