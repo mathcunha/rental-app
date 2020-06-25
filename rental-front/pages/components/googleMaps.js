@@ -53,8 +53,8 @@ const GoogleMaps = ({ google, data, marker, width }) => {
       }}
     >
       {data &&
-        data._embedded &&
-        data._embedded.apartments.map((apt) => (
+        data.content &&
+        data.content.map((apt) => (
           <Marker
             draggable={false}
             name={apt.name}

@@ -50,7 +50,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~clientUser.id)'}}
+    And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available: true , user: {id:'#(~~clientUser.id)'}}
     When method POST
     Then status 403
 
@@ -60,7 +60,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~clientUser.id)'}}
+    And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available: true , user: {id:'#(~~clientUser.id)'}}
     When method POST
     Then status 403
 
@@ -70,7 +70,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~realtorUser.id)'}}
+    And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available: true, user: {id:'#(~~realtorUser.id)'}}
     When method POST
     Then status 201
 
@@ -80,7 +80,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~clientUser.id)'}}
+    And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available: true, user: {id:'#(~~clientUser.id)'}}
     When method POST
     Then status 201
 
@@ -90,7 +90,7 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~realtorUser.id)'}}
+    And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available: true, user: {id:'#(~~realtorUser.id)'}}
     When method POST
     Then status 201
 
@@ -100,6 +100,6 @@ Feature: Create apartments
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~adminUser.id)'}}
+    And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available: true, user: {id:'#(~~adminUser.id)'}}
     When method POST
     Then status 201

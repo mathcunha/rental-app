@@ -51,7 +51,7 @@ const Welcome = ({ router, width }) => {
   const { data, error } = useSWR(
     `${
       process.env.API_URL
-    }/apartments/search/filter?projection=publicApartment${filterURI()}&available=true&sort=price`,
+    }/apartments?projection=publicApartment${filterURI()}&available=true&sort=price&size=1000`,
     fetcher
   );
   const [focusApt, setFocusApt] = useState({});
@@ -74,8 +74,7 @@ const Welcome = ({ router, width }) => {
     if (!Auth.loggedIn()) {
       router.push("/auth/signin");
     } else {
-      const arr = apt._links.self.href.split("/");
-      router.push(`/apt/${arr[arr.length - 1]}`);
+      router.push(`/apt/${apt.id}`);
     }
     setFocusApt(apt);
   };
@@ -90,6 +89,7 @@ const Welcome = ({ router, width }) => {
   return (
     <Fragment>
       <Container
+        maxWidth="lg"
         className={
           showFilter === false ? classes.container : classes.containerHidden
         }
@@ -145,7 +145,7 @@ const Welcome = ({ router, width }) => {
                       resetSearchFields={resetSearchFields}
                     />
                   </Grid>
-                ) : data._embedded && data._embedded.apartments.length === 0 ? (
+                ) : data.content && data.content.length === 0 ? (
                   <Grid item xs={12} md={6}>
                     <AptCard
                       label={"No results found"}
@@ -153,8 +153,8 @@ const Welcome = ({ router, width }) => {
                     />
                   </Grid>
                 ) : (
-                  data._embedded &&
-                  data._embedded.apartments.map((apt) => (
+                  data.content &&
+                  data.content.map((apt) => (
                     <Grid item xs={12} md={6} key={apt.name}>
                       <AptCard
                         apt={apt}

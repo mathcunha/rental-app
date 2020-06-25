@@ -39,9 +39,7 @@ const Rent = ({ router }) => {
   const [city, setCity] = useState("");
   const [img, setImg] = useState({});
   const Auth = new AuthService();
-  const url =
-    id &&
-    `${process.env.API_URL}/apartments/search/rent?projection=publicApartment&id=${id}`;
+  const url = id && `${process.env.API_URL}/apartments/${id}/public`;
   const [loading, setLoading] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [success, setSuccess] = useState(false);

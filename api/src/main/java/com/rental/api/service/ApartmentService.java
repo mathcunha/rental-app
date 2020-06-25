@@ -1,6 +1,8 @@
 package com.rental.api.service;
 
 import com.rental.api.domain.Apartment;
+import com.rental.api.domain.AptStats;
+import com.rental.api.domain.PublicApartment;
 import com.rental.api.repository.ApartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,13 +23,16 @@ public class ApartmentService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') || ('publicApartment'.equals(#projection) && true == #available) || (hasRole('ROLE_REALTOR') && #userId == authentication.principal.id)")
-    public Page<Apartment> filter(String name, Float aptSize, Float price, Integer room, Long userId, Boolean available, String projection, Pageable pageable){
+    public Page<PublicApartment> filter(String name, Float aptSize, Float price, Integer room, Long userId, Boolean available, String projection, Pageable pageable){
         return repository.filter(name, aptSize, price, room, userId, available, pageable);
     }
 
-    @PreAuthorize("'publicApartment'.equals(#projection)")
-    public Apartment findToRent(Long id, String projection){
-        return repository.findToRent(id, projection);
+    public AptStats getStats(){
+        return repository.findAptFilterRange();
+    }
+
+    public PublicApartment findToRent(Long id){
+        return repository.findToRent(id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && @apartmentService.findById(#id).user.id == authentication.principal.id)")

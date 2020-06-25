@@ -1,6 +1,8 @@
 package com.rental.api.controller;
 
 import com.rental.api.domain.Apartment;
+import com.rental.api.domain.AptStats;
+import com.rental.api.domain.PublicApartment;
 import com.rental.api.service.ApartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,9 +33,21 @@ public class ApartmentController {
         return service.findById(id);
     }
 
+    @GetMapping(value = "/{id}/public", produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public PublicApartment findToRent(@PathVariable Long id) {
+        return service.findToRent(id);
+    }
+
+    @GetMapping(value = "/stats", produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public AptStats getStats(){
+        return service.getStats();
+    }
+
     @GetMapping(produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Apartment> filter(
+    public Page<PublicApartment> filter(
             @RequestParam(defaultValue = "0") Float price,
             @RequestParam(defaultValue = "0") Float aptSize,
             @RequestParam(defaultValue = "") String name,
@@ -45,7 +58,7 @@ public class ApartmentController {
             @RequestParam(defaultValue = "0") Integer page,
                                    @RequestParam(defaultValue = "10") Integer size,
                                    @RequestParam(defaultValue = "name") String sort) {
-        Pageable paging = PageRequest.of(page, size, Sort.by(sort).ascending());
+        Pageable paging = PageRequest.of(page, size, Sort.by(String.format("publicInfo.%s", sort)).ascending());
         return service.filter(name, aptSize, price, room, userId, available, projection, paging);
     }
 

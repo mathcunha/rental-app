@@ -27,7 +27,7 @@ const AptFilter = ({
 }) => {
   const Auth = new AuthService();
   const { data, error } = useSWR(
-    `${process.env.API_URL}/apartments/search/findAptFilterRange`,
+    `${process.env.API_URL}/apartments/stats`,
     Auth.fetch
   );
 
