@@ -8,17 +8,17 @@ Feature: Login
     Given path 'api/v1/users/'
     And request {name: <name>}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'api/v1/users/'
     And request {name: <name>,username: <username>}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'api/v1/users/'
     And request {name: <name>,username: <username>,password: password}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'login'
     And request {username: admin ,password: password}

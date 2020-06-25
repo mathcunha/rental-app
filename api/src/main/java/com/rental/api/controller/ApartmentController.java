@@ -57,7 +57,7 @@ public class ApartmentController {
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Apartment> create(@Valid @RequestBody Apartment resource, BindingResult result) {
+    public ResponseEntity<Apartment> create(@Valid @RequestBody Apartment resource) {
         Apartment persisted = service.save(resource);
         return ResponseEntity.created(URI.create(String.format("%s/apartments/%d", basePath, persisted.getId())))
                 .eTag(Long.toString(persisted.getVersion()))
@@ -65,7 +65,7 @@ public class ApartmentController {
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Apartment> update(@Valid @RequestBody Apartment apt, @PathVariable("id") Long id, BindingResult result) {
+    public ResponseEntity<Apartment> update(@Valid @RequestBody Apartment apt, @PathVariable("id") Long id) {
         apt.setId(id);
         Apartment persisted = service.save(apt);
         return ResponseEntity.ok()

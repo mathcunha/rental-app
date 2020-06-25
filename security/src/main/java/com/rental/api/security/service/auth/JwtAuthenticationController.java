@@ -52,22 +52,6 @@ public class JwtAuthenticationController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    @RequestMapping(value = "/user/{id}/toggleRealtor", method = RequestMethod.POST)
-    public ResponseEntity<?> toggleRealtorRole(@PathVariable("id")Long id){
-        if(SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(ADMIN)) {
-            User user = userRepository.findById(id).get();
-            Role realtor = roleRepository.findByName(RoleName.ROLE_REALTOR).get();
-            if (user.getRoles().contains(realtor)) {
-                user.getRoles().remove(realtor);
-            } else {
-                user.getRoles().add(realtor);
-            }
-            return ResponseEntity.ok(userRepository.save(user));
-        }else{
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Not admin user");
-        }
-    }
-
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public ResponseEntity<?> getUserInfo(@RequestHeader String authorization){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

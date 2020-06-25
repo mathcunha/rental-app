@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.net.URI;
 
 @RestController
@@ -50,16 +51,28 @@ public class UserController {
         service.delete(id);
     }
 
+    @DeleteMapping(value = "/{id}/roles/{roleId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteRole(@NotNull @PathVariable("id") Long id, @NotNull @PathVariable("roleId") Long roleId) {
+        service.deleteRole(id, roleId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PostMapping(value = "/{id}/roles/{roleId}")
+    public void addRole(@NotNull @PathVariable("id") Long id, @NotNull @PathVariable("roleId") Long roleId) {
+        service.addRole(id, roleId);
+    }
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<User> create(@Valid @RequestBody User resource, BindingResult result) {
+    public ResponseEntity<User> create(@Valid @RequestBody User resource) {
         User persisted = service.save(resource);
         return ResponseEntity.created(URI.create(String.format("%s/users/%d", basePath, persisted.getId())))
                 .body(persisted);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<User> update(@Valid @RequestBody User apt, @PathVariable("id") Long id, BindingResult result) {
+    public ResponseEntity<User> update(@Valid @RequestBody User apt, @PathVariable("id") Long id) {
         apt.setId(id);
         User persisted = service.save(apt);
         return ResponseEntity.ok()
