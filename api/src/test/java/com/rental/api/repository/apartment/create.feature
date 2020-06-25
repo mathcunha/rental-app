@@ -46,66 +46,60 @@ Feature: Create apartments
 
     Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + clientToken.token
-    And def reqUser = 'api/v1/users/' + clientUser.id
     And def name = (new Date()).getMilliseconds()
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~clientUser.id)'}}
     When method POST
     Then status 403
 
     Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + realtorToken.token
-    And def reqUser = 'api/v1/users/' + clientUser.id
     And def name = java.lang.System.currentTimeMillis()
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~clientUser.id)'}}
     When method POST
-    Then status 400
+    Then status 403
 
     Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + realtorToken.token
-    And def reqUser = 'api/v1/users/' + realtorUser.id
     And def name = java.lang.System.currentTimeMillis()
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~realtorUser.id)'}}
     When method POST
     Then status 201
 
     Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + adminToken.token
-    And def reqUser = 'api/v1/users/' + clientUser.id
     And def name = java.lang.System.currentTimeMillis()
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~clientUser.id)'}}
     When method POST
     Then status 201
 
     Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + adminToken.token
-    And def reqUser = 'api/v1/users/' + realtorUser.id
     And def name = java.lang.System.currentTimeMillis()
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~realtorUser.id)'}}
     When method POST
     Then status 201
 
     Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + adminToken.token
-    And def reqUser = 'api/v1/users/' + adminUser.id
     And def name = java.lang.System.currentTimeMillis()
     And def aptSize = Math.floor(Math.random() * 100)
     And def price = Math.floor(Math.random() * 300)
     And def room = Math.floor(Math.random() * 20)
-    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: '#(reqUser)'}
+    And request {name: '#(name)' ,description: description, available: true, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071, user: {id:'#(~~adminUser.id)'}}
     When method POST
     Then status 201

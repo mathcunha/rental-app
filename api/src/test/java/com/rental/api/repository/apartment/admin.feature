@@ -18,16 +18,16 @@ Feature: Get destination
     Then status 200
     And def user = response
 
-    Given path 'api/v1/apartments/search/filter'
+    Given path 'api/v1/apartments'
     When method GET
     Then status 403
 
-    Given path 'api/v1/apartments/search/filter'
+    Given path 'api/v1/apartments'
     And header Authorization = 'Bearer ' + token.token
     When method GET
     Then status 200
 
-    Given path 'api/v1/apartments/search/filter'
+    Given path 'api/v1/apartments'
     Given param userId = user.id
     And header Authorization = 'Bearer ' + token.token
     When method GET
