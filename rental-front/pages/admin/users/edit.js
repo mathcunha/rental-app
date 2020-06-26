@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const EditUser = ({ user, router }) => {
   const Auth = new AuthService();
   const classes = useStyles();
-  const [endpoint, setEndpoint] = useState("");
+  const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
   const [action, setAction] = useState("");
   const [error, setError] = useState("");
@@ -36,16 +36,16 @@ const EditUser = ({ user, router }) => {
   const [username, setUsername] = useState("");
 
   const isNew = () => {
-    return endpoint === "";
+    return id === "";
   };
 
   useEffect(() => {
-    if (user && user._links) {
+    if (user && user.id) {
       setName(user.name);
       setEmail(user.email);
       setPassword(user.password);
       setUsername(user.username);
-      setEndpoint(user._links.self.href);
+      setId(user.id);
     }
   }, [user]);
 
@@ -74,17 +74,16 @@ const EditUser = ({ user, router }) => {
       username: username,
       password: password,
       email: email,
-      endpoint: endpoint,
+      id: id,
     };
   };
 
   const handleDelete = (e) => {
     setAction("delete");
     setLoading(true);
-    Auth.delete(endpoint)
+    Auth.delete(id)
       .then((res) => {
-        const arr = user._links.self.href.split("/");
-        if (arr[arr.length - 1] == Auth.getProfile().id) {
+        if (user.id == Auth.getProfile().id) {
           Auth.logout();
         }
         router.push("/admin/users/list");
@@ -99,19 +98,23 @@ const EditUser = ({ user, router }) => {
     router.push("/admin/users/list");
   };
 
+  const isRealtor =
+    user &&
+    user.authorities &&
+    user.authorities.filter(
+      (authority) => authority.authority === "ROLE_REALTOR"
+    ).length === 1;
+
   const toggleRealtor = (e) => {
     if (Auth.getProfile().isAdmin) {
       e.preventDefault();
       setLoading(true);
       setAction("save");
       setError("");
-      const link = user._links.self.href.split("/");
-      Auth.fetch(
-        `${process.env.API_HOST}/user/${link[link.length - 1]}/toggleRealtor`,
-        {
-          method: "POST",
-        }
-      )
+
+      Auth.fetch(`${process.env.API_URL}/users/${user.id}/roles/2`, {
+        method: isRealtor ? "DELETE" : "POST",
+      })
         .then((res) => {
           setSuccess(true);
         })
@@ -141,13 +144,6 @@ const EditUser = ({ user, router }) => {
         setLoading(false);
       });
   };
-
-  const isRealtor =
-    user &&
-    user.authorities &&
-    user.authorities.filter(
-      (authority) => authority.authority === "ROLE_REALTOR"
-    ).length === 1;
 
   const passwordError = FormControlValidation(error, "password");
   const emailError = FormControlValidation(error, "email");

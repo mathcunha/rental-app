@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("${spring.data.rest.basePath}/apartments")
@@ -28,15 +29,14 @@ public class ApartmentController {
     private String basePath;
 
     @GetMapping(value = "/{id}", produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    public Apartment findById(@PathVariable Long id) {
-        return service.findById(id);
-    }
+    public ResponseEntity findById(@PathVariable Long id, @RequestParam(required = false) String projection) {
+        if ("public".equals(projection))
+        {
+            return ResponseEntity.of(service.findToRent(id));
+        }else{
+            return ResponseEntity.of(service.findById(id));
+        }
 
-    @GetMapping(value = "/{id}/public", produces = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    public PublicApartment findToRent(@PathVariable Long id) {
-        return service.findToRent(id);
     }
 
     @GetMapping(value = "/stats", produces = "application/json")

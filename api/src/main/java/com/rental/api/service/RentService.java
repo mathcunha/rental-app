@@ -18,7 +18,7 @@ public class RentService {
     //https://stackoverflow.com/questions/1972933/cross-field-validation-with-hibernate-validator-jsr-303
     @PreAuthorize("#rent.id == null && #rent.user.id == authentication.principal.id")
     public Rent save(Rent rent){
-        PublicApartment apt = aptService.findToRent(rent.getApartment().getApartmentId());
+        PublicApartment apt = aptService.findToRent(rent.getApartment().getApartmentId()).get();
         if(!rent.getApartment().getPrice().equals(apt.getPrice())){
             rent.getApartment().setPrice(null);
         }

@@ -5,7 +5,7 @@ import Select from "@material-ui/core/Select";
 import useSWR from "swr";
 import AuthService from "../../utils/authService";
 
-const UserSelect = ({ value, onChange, error }) => {
+const UserSelect = ({ value, onChange, onError }) => {
   const Auth = new AuthService();
   const url =
     Auth.getProfile().isAdmin === true
@@ -13,7 +13,7 @@ const UserSelect = ({ value, onChange, error }) => {
       : `${process.env.API_URL}/users/${Auth.getProfile().id}`;
 
   const [open, setOpen] = React.useState(false);
-  const { data, swrError } = useSWR(url, Auth.fetch);
+  const { data, error } = useSWR(url, Auth.fetch);
 
   const handleChange = onChange;
 
@@ -32,7 +32,7 @@ const UserSelect = ({ value, onChange, error }) => {
         labelId="demo-controlled-open-select-label"
         id="demo-controlled-open-select"
         open={open}
-        error={error}
+        error={onError}
         value={value}
         onClose={handleClose}
         onOpen={handleOpen}
@@ -45,14 +45,14 @@ const UserSelect = ({ value, onChange, error }) => {
           <MenuItem value="loading">
             <em>Loading</em>
           </MenuItem>
-        ) : data._embedded ? (
-          data._embedded.users.map((row) => (
-            <MenuItem key={row.name} value={row._links.self.href}>
+        ) : data.content ? (
+          data.content.map((row) => (
+            <MenuItem key={row.name} value={row.id}>
               {row.name}
             </MenuItem>
           ))
         ) : (
-          <MenuItem key={data.name} value={data._links.self.href}>
+          <MenuItem key={data.name} value={data.id}>
             {data.name}
           </MenuItem>
         )}

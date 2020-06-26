@@ -24,17 +24,13 @@ import { TablePagination } from "@material-ui/core";
 import GoogleMaps from "../../components/googleMaps";
 
 function AptRow({ row, onMouseOver }) {
-  const arr = row._links.self.href.split("/");
-  const id = arr[arr.length - 1];
-
   return (
     <TableRow onMouseOver={onMouseOver}>
       <TableCell>{row.name}</TableCell>
       <TableCell>{row.aptSize}</TableCell>
       <TableCell>{row.price}</TableCell>
-      <TableCell>{row.available === true ? "true" : "false"}</TableCell>
       <TableCell>
-        <Link href="/admin/apartments/[id]" as={`/admin/apartments/${id}`}>
+        <Link href="/admin/apartments/[id]" as={`/admin/apartments/${row.id}`}>
           <Tooltip title="Edit">
             <IconButton aria-label="edit">
               <EditIcon />
@@ -68,8 +64,7 @@ const TripList = () => {
     let uri = "";
     if (Auth.getProfile().isAdmin === true) {
       if (user !== "") {
-        const arr = user.split("/");
-        uri += `&userId=${arr[arr.length - 1]}`;
+        uri += `&userId=${user}`;
       }
     } else {
       uri += `&userId=${Auth.getProfile().id}`;
@@ -90,7 +85,7 @@ const TripList = () => {
 
   const url = `${
     process.env.API_URL
-  }/apartments/search/filter?size=${size}&page=${page}&sort=name${filterURI()}`;
+  }/apartments?size=${size}&page=${page}&sort=name${filterURI()}`;
   const { data, error } = Auth.getProfile() && useSWR(url, Auth.fetch);
 
   const [focusApt, setFocusApt] = useState({});
@@ -175,7 +170,6 @@ const TripList = () => {
                   <TableCell>Name</TableCell>
                   <TableCell>Floor Area</TableCell>
                   <TableCell>Price per Month</TableCell>
-                  <TableCell>Available</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -188,11 +182,11 @@ const TripList = () => {
                   <TableRow>
                     <TableCell>"loading data"</TableCell>
                   </TableRow>
-                ) : data._embedded ? (
-                  data._embedded.apartments.map((row) => (
+                ) : data.content ? (
+                  data.content.map((row) => (
                     <AptRow
                       row={row}
-                      key={row._links.self.href}
+                      key={row.id}
                       onMouseOver={handleFocusApt(row)}
                     />
                   ))
@@ -201,11 +195,11 @@ const TripList = () => {
                 )}
               </TableBody>
             </Table>
-            {data && data.page ? (
+            {data && data.pageable ? (
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={data.page.totalElements}
+                count={data.totalElements}
                 rowsPerPage={size}
                 page={page}
                 onChangePage={handleChangePage}

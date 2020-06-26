@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ApartmentService {
     @Autowired
@@ -18,8 +20,8 @@ public class ApartmentService {
 
     @PreAuthorize("hasRole('ROLE_REALTOR') || hasRole('ROLE_ADMIN')")
     @PostAuthorize("hasRole('ROLE_ADMIN') || (returnObject.user != null && returnObject.user.id == authentication.principal.id)")
-    public Apartment findById(Long id){
-        return repository.findById(id).get();
+    public Optional<Apartment> findById(Long id){
+        return repository.findById(id);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') || ('publicApartment'.equals(#projection) && true == #available) || (hasRole('ROLE_REALTOR') && #userId == authentication.principal.id)")
@@ -31,7 +33,7 @@ public class ApartmentService {
         return repository.findAptFilterRange();
     }
 
-    public PublicApartment findToRent(Long id){
+    public Optional<PublicApartment> findToRent(Long id){
         return repository.findToRent(id);
     }
 

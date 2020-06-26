@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const EditApt = ({ apt, router }) => {
   const Auth = new AuthService();
   const classes = useStyles();
-  const [endpoint, setEndpoint] = useState("");
+  const [id, setId] = useState("");
   const [loading, setLoading] = useState(false);
   const [action, setAction] = useState("");
   const [error, setError] = useState("");
@@ -44,21 +44,21 @@ const EditApt = ({ apt, router }) => {
   const [available, setAvailable] = useState(true);
 
   const isNew = () => {
-    return endpoint === "";
+    return id === "";
   };
 
   useEffect(() => {
-    if (apt && apt._links) {
-      setName(apt.name);
-      setDescription(apt.description);
-      setAptSize(apt.aptSize);
-      setPrice(apt.price);
+    if (apt && apt.id) {
+      setName(apt.publicInfo.name);
+      setDescription(apt.publicInfo.description);
+      setAptSize(apt.publicInfo.aptSize);
+      setPrice(apt.publicInfo.price);
       setAvailable(apt.available);
-      setRoom(apt.room);
-      setLat(apt.lat);
-      setLng(apt.lng);
+      setRoom(apt.publicInfo.room);
+      setLat(apt.publicInfo.lat);
+      setLng(apt.publicInfo.lng);
 
-      setEndpoint(apt._links.self.href);
+      setId(apt.id);
     }
   }, [apt]);
 
@@ -99,17 +99,19 @@ const EditApt = ({ apt, router }) => {
 
   const getData = () => {
     return {
-      name: name,
-      description: description,
-      aptSize: aptSize,
-      price: price,
+      publicInfo: {
+        name: name,
+        description: description,
+        aptSize: aptSize,
+        price: price,
+        room: room,
+        lat: lat,
+        lng: lng,
+      },
       available: available,
-      room: room,
-      lat: lat,
-      lng: lng,
-
-      endpoint: endpoint,
-      user: `${process.env.API_URL}/users/${Auth.getProfile().id}`,
+      id: id,
+      user: { id: isNew() ? Auth.getProfile().id : apt.user.id },
+      version: isNew() ? 0 : apt.version,
     };
   };
 
@@ -135,7 +137,7 @@ const EditApt = ({ apt, router }) => {
   const handleDelete = (e) => {
     setAction("delete");
     setLoading(true);
-    Auth.delete(endpoint)
+    Auth.delete(id)
       .then((res) => {
         router.push("/admin/apartments/list");
       })
@@ -168,13 +170,16 @@ const EditApt = ({ apt, router }) => {
       });
   };
 
-  const nameError = FormControlValidation(error, "name");
-  const descriptionError = FormControlValidation(error, "description");
-  const aptSizeError = FormControlValidation(error, "aptSize");
-  const priceError = FormControlValidation(error, "price");
-  const roomError = FormControlValidation(error, "room");
-  const latError = FormControlValidation(error, "lat");
-  const lngError = FormControlValidation(error, "lng");
+  const nameError = FormControlValidation(error, "publicInfo.name");
+  const descriptionError = FormControlValidation(
+    error,
+    "publicInfo.description"
+  );
+  const aptSizeError = FormControlValidation(error, "publicInfo.aptSize");
+  const priceError = FormControlValidation(error, "publicInfo.price");
+  const roomError = FormControlValidation(error, "publicInfo.room");
+  const latError = FormControlValidation(error, "publicInfo.lat");
+  const lngError = FormControlValidation(error, "publicInfo.lng");
   const availableError = FormControlValidation(error, "available");
 
   return (

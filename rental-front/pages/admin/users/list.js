@@ -22,8 +22,7 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 
 function UserRow({ row }) {
-  const arr = row._links.self.href.split("/");
-  const id = arr[arr.length - 1];
+  const id = row.id;
   const role = row.authorities.reduce(
     (acc, curr) => (acc === "" ? curr.authority : curr.authority + ", " + acc),
     ""
@@ -64,7 +63,7 @@ const UserList = () => {
 
   const url =
     Auth.getProfile().isAdmin === true
-      ? `${process.env.API_URL}/users/search/findByEmailIgnoreCaseStartingWithAndNameIgnoreCaseStartingWith?size=${size}&page=${page}&name=${name}&email=${email}&sort=name`
+      ? `${process.env.API_URL}/users?size=${size}&page=${page}&name=${name}&email=${email}&sort=name`
       : `${process.env.API_URL}/users/${Auth.getProfile().id}`;
 
   const { data, error } = useSWR(url, Auth.fetch);
@@ -131,20 +130,18 @@ const UserList = () => {
                 <TableRow>
                   <TableCell>"loading data"</TableCell>
                 </TableRow>
-              ) : data._embedded ? (
-                data._embedded.users.map((row) => (
-                  <UserRow row={row} key={row.name} />
-                ))
+              ) : data.content ? (
+                data.content.map((row) => <UserRow row={row} key={row.name} />)
               ) : (
                 <UserRow row={data} />
               )}
             </TableBody>
           </Table>
-          {data && data.page ? (
+          {data && data.pageable ? (
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={data.page.totalElements}
+              count={data.totalElements}
               rowsPerPage={size}
               page={page}
               onChangePage={handleChangePage}

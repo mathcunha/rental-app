@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface ApartmentRepository extends CrudRepository<Apartment, Long> {
     @Query(
             value = "select a.publicInfo from Apartment a where (CAST(:name AS string) is null or upper(a.publicInfo.name) LIKE CONCAT('%',upper(CAST(:name AS string)),'%')) and (:available is null or a.available = :available) and (:aptSize is null or a.publicInfo.aptSize >= :aptSize) and (:price is null or a.publicInfo.price >= :price) and (:room is null or a.publicInfo.room >= :room) and (:userId is null or a.user.id = :userId)"
@@ -20,5 +22,5 @@ public interface ApartmentRepository extends CrudRepository<Apartment, Long> {
     public AptStats findAptFilterRange();
 
     @Query("select a.publicInfo from Apartment a where a.id = :id and a.available = true")
-    PublicApartment findToRent(Long id);
+    Optional<PublicApartment> findToRent(Long id);
 }

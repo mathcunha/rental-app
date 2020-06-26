@@ -39,7 +39,7 @@ const Rent = ({ router }) => {
   const [city, setCity] = useState("");
   const [img, setImg] = useState({});
   const Auth = new AuthService();
-  const url = id && `${process.env.API_URL}/apartments/${id}/public`;
+  const url = id && `${process.env.API_URL}/apartments/${id}?projection=public`;
   const [loading, setLoading] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -74,10 +74,11 @@ const Rent = ({ router }) => {
   const getData = () => {
     return {
       moveDate: moveDate,
-      user: `${process.env.API_URL}/users/${Auth.getProfile().id}`,
+      user: { id: Auth.getProfile().id },
       apartment: {
         price: data.price,
         apartmentId: id,
+        name: data.name,
       },
     };
   };
