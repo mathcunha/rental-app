@@ -3,6 +3,9 @@ Full Stack Project: Spring Boot, Next.js
 
 This repository has two projects: rental-api and rental-front 
 
+## on line demo
+[live](https://rental-front.now.sh/)
+
 ## rental-api
 Is a spring-boot app that has two modules: api and security
 ### api
