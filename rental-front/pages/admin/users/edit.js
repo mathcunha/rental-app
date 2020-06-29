@@ -113,7 +113,7 @@ const EditUser = ({ user, router }) => {
       setError("");
 
       Auth.fetch(`${process.env.API_URL}/users/${user.id}/roles/2`, {
-        method: isRealtor ? "DELETE" : "POST",
+        method: isRealtor ? "DELETE" : "PUT",
       })
         .then((res) => {
           setSuccess(true);

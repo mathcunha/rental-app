@@ -57,8 +57,9 @@ public class UserController {
         service.deleteRole(id, roleId);
     }
 
+    //https://www.mscharhag.com/api-design/http-post-put-patch
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PostMapping(value = "/{id}/roles/{roleId}")
+    @PutMapping(value = "/{id}/roles/{roleId}")
     public void addRole(@NotNull @PathVariable("id") Long id, @NotNull @PathVariable("roleId") Long roleId) {
         service.addRole(id, roleId);
     }

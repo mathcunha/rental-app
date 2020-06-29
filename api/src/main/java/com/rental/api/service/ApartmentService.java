@@ -19,7 +19,7 @@ public class ApartmentService {
     ApartmentRepository repository;
 
     @PreAuthorize("hasRole('ROLE_REALTOR') || hasRole('ROLE_ADMIN')")
-    @PostAuthorize("hasRole('ROLE_ADMIN') || (returnObject.user != null && returnObject.user.id == authentication.principal.id)")
+    @PostAuthorize("hasRole('ROLE_ADMIN') || (returnObject.orElse(null)?.user.id == authentication.principal.id)")
     public Optional<Apartment> findById(Long id){
         return repository.findById(id);
     }
@@ -37,14 +37,14 @@ public class ApartmentService {
         return repository.findToRent(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && @apartmentService.findById(#id).user.id == authentication.principal.id)")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && @apartmentService.findById(#id).get().user.id == authentication.principal.id)")
     public void delete(Long id){
         Apartment apt = new Apartment();
         apt.setId(id);
         repository.delete(apt);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #apt.user != null && #apt.user.id == authentication.principal.id && (#apt.id == null || @apartmentService.findById(#apt.id).user.id == authentication.principal.id))")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #apt.user != null && #apt.user.id == authentication.principal.id && (#apt.id == null || @apartmentService.findById(#apt.id).get().user.id == authentication.principal.id))")
     public Apartment save(Apartment apt){
         return repository.save(apt);
     }

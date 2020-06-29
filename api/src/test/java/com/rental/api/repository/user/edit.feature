@@ -16,25 +16,25 @@ Feature: Update/Delete user
     And def name = (new Date()).getMilliseconds()
     And request {name: '1591810321164',username: '1591810321164',password: password, email: '1591810321164@gmail.com'}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'api/v1/users/'
     And def name = (new Date()).getMilliseconds()
     And request {name: '1591810321164',username: '1591810321164',password: password, email: '1591810321164@gmail.com'}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'api/v1/users/'
     And def name = (new Date()).getMilliseconds()
     And request {name: '1591810321164',username: '1591810321164',password: password, email: '1591810443819@gmail.com'}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'api/v1/users/'
     And def name = (new Date()).getMilliseconds()
     And request {name: '1591810321164',username: '1591810443819',password: password, email: '1591810321164@gmail.com'}
     When method POST
-    Then status 500
+    Then status 400
 
     Given path 'api/v1/users/'
     And def name = (new Date()).getMilliseconds()
