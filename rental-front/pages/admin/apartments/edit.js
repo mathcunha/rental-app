@@ -170,7 +170,9 @@ const EditApt = ({ apt, router }) => {
       });
   };
 
-  const nameError = FormControlValidation(error, "publicInfo.name");
+  const nameError = FormControlValidation(error, "publicInfo.name")
+    ? FormControlValidation(error, "publicInfo.name")
+    : FormControlValidation(error, "name");
   const descriptionError = FormControlValidation(
     error,
     "publicInfo.description"
