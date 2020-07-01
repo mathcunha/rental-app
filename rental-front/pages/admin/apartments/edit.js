@@ -137,7 +137,7 @@ const EditApt = ({ apt, router }) => {
   const handleDelete = (e) => {
     setAction("delete");
     setLoading(true);
-    Auth.delete(id)
+    Auth.delete(`${process.env.API_URL}/apartments/${id}`)
       .then((res) => {
         router.push("/admin/apartments/list");
       })

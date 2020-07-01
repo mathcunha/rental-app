@@ -52,7 +52,7 @@ Feature: update/delete apartments
     And def room = Math.floor(Math.random() * 20)
     And request {publicInfo : { name: '#(name)', description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, user: {id:'#(~~adminUser.id)'}}
     When method POST
-    And def aptAdmin = responseHeaders['Location']
+    And def aptAdmin = responseHeaders['Location'][0]
     Then status 201
     And def aptAdminBody = response
 
@@ -64,7 +64,7 @@ Feature: update/delete apartments
     And def room = Math.floor(Math.random() * 20)
     And request {publicInfo : { name: '#(name)', description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, user: {id:'#(~~realtorUser.id)'}}
     When method POST
-    And def aptRealtor = responseHeaders['Location']
+    And def aptRealtor = responseHeaders['Location'][0]
     And def aptRealtorBody = response
     Then status 201
 
@@ -78,62 +78,62 @@ Feature: update/delete apartments
     When method PUT
     Then status 403
 
-    Given path aptAdmin
+    Given url aptAdmin
     And header Authorization = 'Bearer ' + realtorToken.token
     And request {publicInfo : { name: '#(name)' ,description: description + 'updated', aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, user: {id:'#(~~realtorUser.id)'}}
     When method PUT
     Then status 403
 
-    Given path aptAdmin
+    Given url aptAdmin
     And header Authorization = 'Bearer ' + clientToken.token
     And request {publicInfo : { name: '#(name)' ,description: description + 'updated', aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, user: {id:'#(~~realtorUser.id)'}}
     When method PUT
     Then status 403
 
-    Given path aptRealtor
+    Given url aptRealtor
     And header Authorization = 'Bearer ' + realtorToken.token
     And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, version: '#(~~aptRealtorBody.version)',  user: {id:'#(~~realtorUser.id)'}}
     When method PUT
     Then status 200
     And def aptRealtorBody = response
 
-    Given path aptRealtor
+    Given url aptRealtor
     And header Authorization = 'Bearer ' + adminToken.token
     And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, version: '#(~~aptRealtorBody.version)', user: {id:'#(~~realtorUser.id)'}}
     When method PUT
     Then status 200
     And def aptRealtorBody = response
 
-    Given path aptAdmin
+    Given url aptAdmin
     And header Authorization = 'Bearer ' + adminToken.token
     And request {publicInfo : { name: '#(name)' ,description: description, aptSize: #(parseFloat(aptSize)+1), price: #(parseFloat(price)+1), room: #(parseInt(room)+1), lat: 47.359423, lng: -122.021071}, available:true, version: '#(~~aptAdminBody.version)', user: {id:'#(~~realtorUser.id)'}}
     When method PUT
     Then status 200
 
-    Given path aptAdmin
+    Given url aptAdmin
     When method DELETE
     Then status 403
 
-    Given path aptRealtor
+    Given url aptRealtor
     When method DELETE
     Then status 403
 
-    Given path aptAdmin
+    Given url aptAdmin
     And header Authorization = 'Bearer ' + realtorToken.token
     When method DELETE
     Then status 403
 
-    Given path aptAdmin
+    Given url aptAdmin
     And header Authorization = 'Bearer ' + clientToken.token
     When method DELETE
     Then status 403
 
-    Given path aptRealtor
+    Given url aptRealtor
     And header Authorization = 'Bearer ' + realtorToken.token
     When method DELETE
     Then status 204
 
-    Given path aptAdmin
+    Given url aptAdmin
     And header Authorization = 'Bearer ' + adminToken.token
     When method DELETE
     Then status 204

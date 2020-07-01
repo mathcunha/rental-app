@@ -13,10 +13,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("${spring.data.rest.basePath}/apartments")
@@ -63,16 +63,23 @@ public class ApartmentController {
     }
 
     @DeleteMapping(value = "/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        service.delete(id);
+    public ResponseEntity delete(@PathVariable("id") Long id) {
+        if(service.delete(id)){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Apartment> create(@Valid @RequestBody Apartment resource) {
         Apartment persisted = service.save(resource);
-        return ResponseEntity.created(URI.create(String.format("%s/apartments/%d", basePath, persisted.getId())))
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(persisted.getId())
+                .toUri();
+        return ResponseEntity.created(uri)
                 .eTag(Long.toString(persisted.getVersion()))
                 .body(persisted);
     }

@@ -38,13 +38,15 @@ public class ApartmentService {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && @apartmentService.findById(#id).get().user.id == authentication.principal.id)")
-    public void delete(Long id){
-        Apartment apt = new Apartment();
-        apt.setId(id);
-        repository.delete(apt);
+    public Boolean delete(Long id){
+        if(repository.existsById(id)){
+            repository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || (hasRole('ROLE_REALTOR') && #apt.user != null && #apt.user.id == authentication.principal.id && (#apt.id == null || @apartmentService.findById(#apt.id).get().user.id == authentication.principal.id))")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || ( hasRole('ROLE_REALTOR') && ((#apt.id == null && #apt.user.id == authentication.principal.id) || (#apt.id != null && @apartmentService.findById(#apt.id).get().user.id == authentication.principal.id))) ")
     public Apartment save(Apartment apt){
         return repository.save(apt);
     }

@@ -81,7 +81,7 @@ const EditUser = ({ user, router }) => {
   const handleDelete = (e) => {
     setAction("delete");
     setLoading(true);
-    Auth.delete(id)
+    Auth.delete(`${process.env.API_URL}/users/${id}`)
       .then((res) => {
         if (user.id == Auth.getProfile().id) {
           Auth.logout();
